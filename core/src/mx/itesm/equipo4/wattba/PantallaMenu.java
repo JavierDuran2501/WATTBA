@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
@@ -17,6 +19,8 @@ Autor: Javier Alejandro Durán Díaz
 
 public class PantallaMenu extends Pantalla {
 
+    private final Juego juego;
+
     //Fondo de menú principalx
     private Texture texturaFondo;
 
@@ -25,7 +29,7 @@ public class PantallaMenu extends Pantalla {
 
 
     public PantallaMenu(Juego juego) {
-
+        this.juego = juego;
     }
 
     //Entra en ejecución cuando la pantalla se va a mostrar; inicializa objetos
@@ -64,6 +68,37 @@ public class PantallaMenu extends Pantalla {
         TextureRegionDrawable trdBtnTiendaRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnTiendaRetro));
         ImageButton btnTienda = new ImageButton(trdBtnTienda,trdBtnTiendaRetro);
         btnTienda.setPosition(ANCHO/2,ALTO/2-87, Align.center);
+
+        // Listeners de los botones
+        //btn Acerca de
+        btnAcercaDe.addListener( new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                // Cambiamos de pantalla
+                juego.setScreen(new PantallaAcercaDe(juego));
+            }
+        });
+
+        //btn Tienda
+        btnTienda.addListener( new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                // Cambiamos de pantalla
+                juego.setScreen(new PantallaTienda(juego));
+            }
+        });
+
+        //btn Juego
+        btnJugar.addListener( new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                // Cambiamos de pantalla
+                juego.setScreen(new PantallaJugar(juego));
+            }
+        });
 
         escenaMenu.addActor(btnJugar);
         escenaMenu.addActor(btnAcercaDe);
