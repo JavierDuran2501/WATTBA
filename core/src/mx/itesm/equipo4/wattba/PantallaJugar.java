@@ -2,6 +2,7 @@ package mx.itesm.equipo4.wattba;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -11,11 +12,16 @@ public class PantallaJugar extends Pantalla {
 
     //Fondo de la pantalla
     private Texture texturaFondo;
+    private float xFondo = 0;
 
     //Vaquero
     private Vaquero vaquero;
     private float timerAnimaVaquero;
     private final float TIEMPO_FRAME_VAQUERO = 1;
+
+    // Texto
+    private Texto texto;        // Dibuja textos en la pantalla
+    private float puntos;
 
     //Obstaculos
     private Obstaculo tronco;
@@ -27,8 +33,19 @@ public class PantallaJugar extends Pantalla {
         this.texturaFondo = new Texture("Pantallas/Juego.jpg");
         crearVaquero();
         crearObstaculos();
+        crearTexto();
+        cargarPuntos();
 
         Gdx.input.setInputProcessor(new ProcesadorEntrada());
+    }
+
+    private void cargarPuntos() {
+        Preferences prefs = Gdx.app.getPreferences("marcador");
+        puntos = prefs.getFloat("PUNTOS", 0);
+    }
+
+    private void crearTexto() {
+        texto = new Texto("Fuentes/game.fnt");
     }
 
     private void crearObstaculos() {
@@ -45,6 +62,7 @@ public class PantallaJugar extends Pantalla {
     @Override
     public void render(float delta) {
         // Actualizar objetos
+        actualizar();
         verificarChoques();
         //actualizarVaquero(delta);
 
@@ -55,7 +73,11 @@ public class PantallaJugar extends Pantalla {
 
         batch.begin();
         //Fondo
-        batch.draw(texturaFondo,0,0);
+        batch.draw(texturaFondo, xFondo,0);
+        batch.draw(texturaFondo, xFondo + texturaFondo.getWidth(), 0);
+
+        // Texto
+        dibujarTexto();
 
         //Vaquero
         vaquero.render(batch);
@@ -65,6 +87,22 @@ public class PantallaJugar extends Pantalla {
         tronco.render(batch);
 
         batch.end();
+    }
+
+    private void dibujarTexto() {
+        texto.mostrarMensaje(batch, "What a time to be alive", ANCHO/2, 0.9f*ALTO);
+        //puntos += Gdx.graphics.getDeltaTime();
+        int puntosInt = (int)puntos;
+        texto.mostrarMensaje(batch, "" + puntosInt, ANCHO/2*0.1f, 0.1f*ALTO);
+    }
+
+    private void actualizar() {
+        // Movimiento del fondo
+        xFondo-=5;
+        if (xFondo==-texturaFondo.getWidth()) {
+            xFondo = 0;
+        }
+
     }
 
     private void actualizarVaquero(float delta) {
@@ -128,7 +166,8 @@ public class PantallaJugar extends Pantalla {
                 vaquero.moverIzquierda();
             }else{
                 // derecha
-                vaquero.moverDerecha();
+                // vaquero.moverDerecha(); //
+                vaquero.saltar();
             }
             return true;
         }

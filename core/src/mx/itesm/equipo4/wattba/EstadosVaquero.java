@@ -2,7 +2,7 @@ package mx.itesm.equipo4.wattba;
 
 public enum EstadosVaquero
 {
-    IDLE,
+    CAMINANDO,
     SALTANDO,
     MURIENDO
 
