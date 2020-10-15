@@ -15,5 +15,10 @@ public class Objeto {
         sprite.setPosition(x, y);
     }
 
+    public Objeto()
+    {
+
+    }
+
     public void render(SpriteBatch batch){ sprite.draw(batch);}
 }

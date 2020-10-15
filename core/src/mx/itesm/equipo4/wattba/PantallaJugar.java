@@ -54,7 +54,7 @@ public class PantallaJugar extends Pantalla {
     }
 
     private void crearVaquero() {
-      Texture texturaVaquero = new Texture("Vaquero/Idle__000.png");
+      Texture texturaVaquero = new Texture("Correr.png");
       Texture texturaMuriendo = new Texture("Vaquero/Dead__000.png");
       vaquero = new Vaquero(texturaVaquero, texturaMuriendo, 0, 0);
     }
@@ -72,28 +72,30 @@ public class PantallaJugar extends Pantalla {
         batch.setProjectionMatrix(camara.combined);
 
         batch.begin();
+
         //Fondo
         batch.draw(texturaFondo, xFondo,0);
         batch.draw(texturaFondo, xFondo + texturaFondo.getWidth(), 0);
 
-        // Texto
-        dibujarTexto();
-
         //Vaquero
         vaquero.render(batch);
 
+        // Texto
+        dibujarTexto();
 
         //Obstaculos
         tronco.render(batch);
+
+
 
         batch.end();
     }
 
     private void dibujarTexto() {
-        texto.mostrarMensaje(batch, "What a time to be alive", ANCHO/2, 0.9f*ALTO);
+        //texto.mostrarMensaje(batch, "What a time to be alive", ANCHO/2, 0.9f*ALTO);
         //puntos += Gdx.graphics.getDeltaTime();
         int puntosInt = (int)puntos;
-        texto.mostrarMensaje(batch, "" + puntosInt, ANCHO/2*0.1f, 0.1f*ALTO);
+        texto.mostrarMensaje(batch, "" + puntosInt, ANCHO*0.9f, 0.9f*ALTO);
     }
 
     private void actualizar() {
@@ -102,6 +104,9 @@ public class PantallaJugar extends Pantalla {
         if (xFondo==-texturaFondo.getWidth()) {
             xFondo = 0;
         }
+
+        //Actulizar puntos
+        puntos += Gdx.graphics.getDeltaTime();
 
     }
 
@@ -163,7 +168,7 @@ public class PantallaJugar extends Pantalla {
             //Mover al vaquero
             if(v.x<= ANCHO/2){
                 // Izq
-                vaquero.moverIzquierda();
+                //vaquero.moverIzquierda();
             }else{
                 // derecha
                 // vaquero.moverDerecha(); //
