@@ -9,4 +9,8 @@ public class Obstaculo extends Objeto
     public Obstaculo(Texture textura, float x, float y) {
         super(textura, x, y);
     }
+
+    public void moverIzquierda() {
+        sprite.setX(sprite.getX()-10);
+    }
 }

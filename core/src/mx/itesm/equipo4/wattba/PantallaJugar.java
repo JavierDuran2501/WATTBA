@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -22,10 +23,16 @@ public class PantallaJugar extends Pantalla {
 
     // Texto
     private Texto texto;        // Dibuja textos en la pantalla
-    private float puntos;
+    private float puntos = 0;
+
+    //Epoca
+    private Epocas epoca = Epocas.MESOZOICA;
+
+    private Texture texturaGeneral;
 
     //Obstaculos
     private Obstaculo obstaculo_0;
+    private int alturaObstaculo = 0;
 
     // Textura Dinosaurios
     private Texture texturaDino_0;
@@ -37,6 +44,7 @@ public class PantallaJugar extends Pantalla {
     private Array<Obstaculo> arrObstaculos;
     private float timerCrearObstaculos;
     private float TIEMPO_CREA_OBSTACULOS = 1;
+    private float tiempoBase = 1;
 
     public PantallaJugar(Juego juego) { this.juego = juego;}
 
@@ -46,9 +54,24 @@ public class PantallaJugar extends Pantalla {
         crearVaquero();
         crearObstaculos();
         crearTexto();
-        cargarPuntos();
+        //cargarPuntos();
+        crearEnemigos();
+        crearTexturas();
 
         Gdx.input.setInputProcessor(new ProcesadorEntrada());
+    }
+
+    private void crearTexturas() {
+        texturaDino_0 = new Texture("Obstaculos/tronco.png");
+        texturaDino_1 = new Texture("Obstaculos/tronco.png");
+        texturaDino_2 = new Texture("Obstaculos/tronco.png");
+        texturaDino_3 = new Texture("Obstaculos/tronco.png");
+
+    }
+
+    private void crearEnemigos() {
+        //texturaGoomba = new Texture("runner/goomba.png");
+        arrObstaculos = new Array<>();
     }
 
     private void cargarPuntos() {
@@ -80,6 +103,7 @@ public class PantallaJugar extends Pantalla {
 
 
 
+
         borrarPantalla();
         batch.setProjectionMatrix(camara.combined);
 
@@ -89,6 +113,9 @@ public class PantallaJugar extends Pantalla {
         batch.draw(texturaFondo, xFondo,0);
         batch.draw(texturaFondo, xFondo + texturaFondo.getWidth(), 0);
 
+        //Dibujar Enemigos
+        dibujarEnemigos();
+
         //Vaquero
         vaquero.render(batch);
 
@@ -96,11 +123,18 @@ public class PantallaJugar extends Pantalla {
         dibujarTexto();
 
         //Obstaculos
-        obstaculo_0.render(batch);
+        //obstaculo_0.render(batch);
 
 
 
         batch.end();
+    }
+
+    private void dibujarEnemigos() {
+        for (Obstaculo obstaculo: arrObstaculos) {
+            obstaculo.render(batch);
+            obstaculo.moverIzquierda();
+        }
     }
 
     private void dibujarTexto() {
@@ -117,9 +151,65 @@ public class PantallaJugar extends Pantalla {
             xFondo = 0;
         }
 
+        actualizarObstaculos();
+
         //Actulizar puntos
         puntos += Gdx.graphics.getDeltaTime();
 
+    }
+
+    private void actualizarObstaculos() {
+        timerCrearObstaculos += Gdx.graphics.getDeltaTime();
+        if(timerCrearObstaculos >= TIEMPO_CREA_OBSTACULOS){
+            timerCrearObstaculos = 0;
+            TIEMPO_CREA_OBSTACULOS = tiempoBase + MathUtils.random()*2;
+            if(tiempoBase>0){
+                tiempoBase -= -0.01f;
+            }
+            int texturaRandom = MathUtils.random(0,4);
+            alturaObstaculo = 0;
+            switch (epoca){
+                case MESOZOICA:
+                    switch(texturaRandom){
+                        case 0:
+                            texturaGeneral = texturaDino_0;
+                            break;
+                        case 1:
+                            texturaGeneral = texturaDino_1;
+                            break;
+                        case 2:
+                            texturaGeneral = texturaDino_2;
+                            break;
+                        default:
+                            alturaObstaculo = 30;
+                            texturaGeneral = texturaDino_3;
+                            break;
+                    }
+                    break;
+                case PREHISTORIA:
+                    break;
+                case EDAD_ANTIGUA:
+                    break;
+                case EDAD_MEDIA:
+                    break;
+                case EDAD_MODERNA:
+                    break;
+                case EDAD_CONTEMPORANEA:
+                    break;
+                case EDAD_FUTURA:
+                    break;
+            }
+
+            Obstaculo obstaculo = new Obstaculo(texturaGeneral, ANCHO + 50, alturaObstaculo);
+            arrObstaculos.add(obstaculo);
+        }
+
+        for (int i = arrObstaculos.size-1; i >= 0; i--) {
+            Obstaculo obstaculo = arrObstaculos.get(i);
+            if (obstaculo.sprite.getX() < 0 - obstaculo.sprite.getWidth()){
+                arrObstaculos.removeIndex(i);
+            }
+        }
     }
 
     private void actualizarVaquero(float delta) {
