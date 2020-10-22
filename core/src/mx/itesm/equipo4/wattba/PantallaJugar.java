@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 public class PantallaJugar extends Pantalla {
     private static Juego juego;
@@ -24,7 +25,18 @@ public class PantallaJugar extends Pantalla {
     private float puntos;
 
     //Obstaculos
-    private Obstaculo tronco;
+    private Obstaculo obstaculo_0;
+
+    // Textura Dinosaurios
+    private Texture texturaDino_0;
+    private Texture texturaDino_1;
+    private Texture texturaDino_2;
+    private Texture texturaDino_3;
+
+    // Arreglo Enemigos
+    private Array<Obstaculo> arrObstaculos;
+    private float timerCrearObstaculos;
+    private float TIEMPO_CREA_OBSTACULOS = 1;
 
     public PantallaJugar(Juego juego) { this.juego = juego;}
 
@@ -50,11 +62,11 @@ public class PantallaJugar extends Pantalla {
 
     private void crearObstaculos() {
         Texture texturaTronco = new Texture("Obstaculos/Tronco.png");
-        tronco = new Obstaculo(texturaTronco, ANCHO/2, 0);
+        obstaculo_0 = new Obstaculo(texturaTronco, ANCHO/2, 0);
     }
 
     private void crearVaquero() {
-      Texture texturaVaquero = new Texture("Correr.png");
+      Texture texturaVaquero = new Texture("Vaquero/Correr.png");
       Texture texturaMuriendo = new Texture("Vaquero/Dead__000.png");
       vaquero = new Vaquero(texturaVaquero, texturaMuriendo, 0, 0);
     }
@@ -84,7 +96,7 @@ public class PantallaJugar extends Pantalla {
         dibujarTexto();
 
         //Obstaculos
-        tronco.render(batch);
+        obstaculo_0.render(batch);
 
 
 
@@ -121,7 +133,7 @@ public class PantallaJugar extends Pantalla {
 
     private void verificarChoques() {
         Rectangle rectVaquero = vaquero.sprite.getBoundingRectangle();
-        Rectangle rectTronco = tronco.sprite.getBoundingRectangle();
+        Rectangle rectTronco = obstaculo_0.sprite.getBoundingRectangle();
         if(rectVaquero.overlaps(rectTronco)){
             // COLISIÓN!!!
             vaquero.setEstado(EstadosVaquero.MURIENDO);
@@ -172,7 +184,11 @@ public class PantallaJugar extends Pantalla {
             }else{
                 // derecha
                 // vaquero.moverDerecha(); //
-                vaquero.saltar();
+                if (vaquero.getEstado() != EstadosVaquero.SALTANDO)
+                {
+                    vaquero.saltar();
+                }
+
             }
             return true;
         }

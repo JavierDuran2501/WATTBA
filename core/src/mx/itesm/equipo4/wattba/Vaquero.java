@@ -33,16 +33,16 @@ public class Vaquero extends Objeto
         //super(texturaCorriendo, x, y);
         this.texturaMuriendo = texturaMuriendo;
         TextureRegion region = new TextureRegion(texturaCorriendo);
-        TextureRegion[][] texturasFrame = region.split(32, 64);
+        TextureRegion[][] texturasFrame = region.split(32, 300);
 
         sprite = new Sprite(texturasFrame[0][0]);
         sprite.setPosition(x, y);
 
         //Animación
-        TextureRegion[] arrFrames = { texturasFrame[0][9],texturasFrame[0][8],
-                texturasFrame[0][7],texturasFrame[0][6],texturasFrame[0][5],
-                texturasFrame[0][4],texturasFrame[0][3],texturasFrame[0][2],
-                texturasFrame[0][1]};
+        TextureRegion[] arrFrames = { texturasFrame[0][1],texturasFrame[0][2],
+                texturasFrame[0][3],texturasFrame[0][4],texturasFrame[0][5],
+                texturasFrame[0][6],texturasFrame[0][7],texturasFrame[0][8],
+                texturasFrame[0][9]};
 
         animacion = new Animation<TextureRegion>(0.1f, arrFrames);
         animacion.setPlayMode(Animation.PlayMode.LOOP);
@@ -81,8 +81,10 @@ public class Vaquero extends Objeto
     public void render(SpriteBatch batch) {
         //actualizar();
         float delta = Gdx.graphics.getDeltaTime();  // 1/60
+        timerAnimacion += delta;
         if (estado==EstadosVaquero.CORRIENDO) {
-            super.render(batch);
+            TextureRegion frame = animacion.getKeyFrame(timerAnimacion);
+            batch.draw(frame, sprite.getX(), sprite.getY());
 
         } else {
             //Gdx.app.log("SALTA", "tAire: " + tAire);
