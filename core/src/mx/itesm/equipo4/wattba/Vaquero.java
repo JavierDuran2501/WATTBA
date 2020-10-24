@@ -23,7 +23,7 @@ public class Vaquero extends Objeto
     // Salto
     private float yBase;        // y del piso
     private float tAire;        // tiempo de simulación < tVuelo
-    private final float V0 = 100;
+    private final float V0 = 125;
     private final float G = 20;
     private float tVuelo;
 
@@ -33,7 +33,7 @@ public class Vaquero extends Objeto
         //super(texturaCorriendo, x, y);
         this.texturaMuriendo = texturaMuriendo;
         TextureRegion region = new TextureRegion(texturaCorriendo);
-        TextureRegion[][] texturasFrame = region.split(32, 300);
+        TextureRegion[][] texturasFrame = region.split(200, 244);
 
         sprite = new Sprite(texturasFrame[0][0]);
         sprite.setPosition(x, y);

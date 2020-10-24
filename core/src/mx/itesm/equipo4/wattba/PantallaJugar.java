@@ -3,11 +3,25 @@ package mx.itesm.equipo4.wattba;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PantallaJugar extends Pantalla {
     private static Juego juego;
@@ -15,6 +29,19 @@ public class PantallaJugar extends Pantalla {
     //Fondo de la pantalla
     private Texture texturaFondo;
     private float xFondo = 0;
+
+    // Estado del juego
+    private EstadoJuego estado = EstadoJuego.JUGANDO;
+
+    // Pausa
+    private EscenaPausa escenaPausa;
+
+    // GameOver
+    private EscenaGameOver escenaGameOver;
+
+    // Cámara/Vista HUD/GameOver
+    private OrthographicCamera camaraHUD;
+    private Viewport vistaHUD;
 
     //Vaquero
     private Vaquero vaquero;
@@ -57,8 +84,26 @@ public class PantallaJugar extends Pantalla {
         //cargarPuntos();
         crearEnemigos();
         crearTexturas();
+        crearHUD();
+        crearEscenaPausa();
+        crearEscenaGameOver();
 
         Gdx.input.setInputProcessor(new ProcesadorEntrada());
+    }
+
+    private void crearEscenaGameOver() {
+        escenaGameOver = new EscenaGameOver(vistaHUD, batch);
+    }
+
+    private void crearEscenaPausa() {
+        escenaPausa = new EscenaPausa(vistaHUD, batch);
+    }
+
+    private void crearHUD() {
+        camaraHUD = new OrthographicCamera(ANCHO, ALTO);
+        camaraHUD.position.set(ANCHO/2, ALTO/2, 0);
+        camaraHUD.update();
+        vistaHUD = new StretchViewport(ANCHO, ALTO, camaraHUD);
     }
 
     private void crearTexturas() {
@@ -89,7 +134,7 @@ public class PantallaJugar extends Pantalla {
     }
 
     private void crearVaquero() {
-      Texture texturaVaquero = new Texture("Vaquero/Correr.png");
+      Texture texturaVaquero = new Texture("Vaquero/Correr2.png");
       Texture texturaMuriendo = new Texture("Vaquero/Dead__000.png");
       vaquero = new Vaquero(texturaVaquero, texturaMuriendo, 0, 0);
     }
@@ -97,13 +142,12 @@ public class PantallaJugar extends Pantalla {
     @Override
     public void render(float delta) {
         // Actualizar objetos
-        actualizar();
-        verificarChoques();
+        if (estado == EstadoJuego.JUGANDO){
+            actualizar();
+            verificarChoques();
+        }
+
         //actualizarVaquero(delta);
-
-
-
-
         borrarPantalla();
         batch.setProjectionMatrix(camara.combined);
 
@@ -116,6 +160,8 @@ public class PantallaJugar extends Pantalla {
         //Dibujar Enemigos
         dibujarEnemigos();
 
+
+
         //Vaquero
         vaquero.render(batch);
 
@@ -125,15 +171,30 @@ public class PantallaJugar extends Pantalla {
         //Obstaculos
         //obstaculo_0.render(batch);
 
-
-
         batch.end();
+
+        // Dibujar el menú de pausa sí esta en PAUSA
+        if (estado == EstadoJuego.PAUSADO) {
+            batch.setProjectionMatrix(camaraHUD.combined);
+            escenaPausa.draw();
+            batch.begin();
+            batch.end();
+        }
+
+        //Dibujar el menú de GameOver si esta en GAME_OVER
+        if (estado == EstadoJuego.GAME_OVER) {
+            batch.setProjectionMatrix(camaraHUD.combined);
+            escenaGameOver.draw();
+            batch.begin();
+            batch.end();
+        }
     }
 
     private void dibujarEnemigos() {
         for (Obstaculo obstaculo: arrObstaculos) {
             obstaculo.render(batch);
-            obstaculo.moverIzquierda();
+            if (estado == EstadoJuego.JUGANDO)
+                obstaculo.moverIzquierda();
         }
     }
 
@@ -151,6 +212,7 @@ public class PantallaJugar extends Pantalla {
             xFondo = 0;
         }
 
+        // Mover a los enemigos
         actualizarObstaculos();
 
         //Actulizar puntos
@@ -229,6 +291,8 @@ public class PantallaJugar extends Pantalla {
                 vaquero.sprite.setY(ALTO);
                 vaquero.setEstado(EstadosVaquero.MURIENDO);
                 arrObstaculos.removeIndex(i);
+                estado = EstadoJuego.GAME_OVER;
+                Gdx.input.setInputProcessor(escenaGameOver);
                 Gdx.app.log("COLISIÓN", "El vaquero choco" + i);
                 break;
             }
@@ -275,7 +339,16 @@ public class PantallaJugar extends Pantalla {
             //Mover al vaquero
             if(v.x<= ANCHO/2){
                 // Izq
-                //vaquero.moverIzquierda();
+                // Poner Pausa
+                if (estado == EstadoJuego.JUGANDO){
+                    estado = EstadoJuego.PAUSADO;
+                    // Cambiar el InputProcessor
+                    Gdx.input.setInputProcessor(escenaPausa);
+                    Gdx.app.log("PAUSA", "Cambia a pausado....");
+                }else if (estado == EstadoJuego.PAUSADO) {
+                    estado = EstadoJuego.JUGANDO;
+                    Gdx.app.log("PAUSA", "Cambia a jugando....");
+                }
             }else{
                 // derecha
                 // vaquero.moverDerecha(); //
@@ -306,6 +379,116 @@ public class PantallaJugar extends Pantalla {
         @Override
         public boolean scrolled(int amount) {
             return false;
+        }
+    }
+
+    private class EscenaPausa extends Stage {
+
+        public EscenaPausa(Viewport vista, SpriteBatch batch) {
+            super(vista, batch);
+
+           /* Texture texturaSprite = new Texture("runner/bolaFuego.png");
+            sprite = new Sprite(texturaSprite);
+            sprite.setPosition(ANCHO/2, ALTO*0.6f);*/
+
+            Pixmap pixmap = new Pixmap((int)(ANCHO*0.75f), (int)(0.8f*ALTO),
+                    Pixmap.Format.RGBA8888);
+            pixmap.setColor(0,0,0,0.5f);
+            pixmap.fillRectangle(0,0,pixmap.getWidth(), pixmap.getHeight());
+
+            Texture textura = new Texture(pixmap);
+            Image imgPausa = new Image(textura);
+            imgPausa.setPosition(ANCHO/2 - pixmap.getWidth()/2,
+                    ALTO/2 - pixmap.getHeight()/2);
+
+            this.addActor(imgPausa);        // Fondo
+
+            // Botón(es)
+            //btnReanudar
+            Texture texturaBtnReanudar = new Texture("btnsPausa/btnReanudar.png");
+            TextureRegionDrawable trdBtnReanudar = new TextureRegionDrawable(new TextureRegion(texturaBtnReanudar));
+            //Retroalimentación
+            Texture texturaBtnReanudarRetro = new Texture("btnsPausa/btnReanudarRetro.png");
+            TextureRegionDrawable trdBtnReanudarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnReanudarRetro));
+            ImageButton btnReanudar = new ImageButton(trdBtnReanudar,trdBtnReanudarRetro);
+            btnReanudar.setPosition(ANCHO/2,ALTO/2, Align.center);
+
+            //btnSalir
+            Texture texturaBtnSalir = new Texture("btnsPausa/btnSalir.png");
+            TextureRegionDrawable trdBtnSalir = new TextureRegionDrawable(new TextureRegion(texturaBtnSalir));
+            //Retroalimentación
+            Texture texturaBtnSalirRetro = new Texture("btnsPausa/btnReanudarRetro.png");
+            TextureRegionDrawable trdBtnJugarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSalirRetro));
+            ImageButton btnSalir = new ImageButton(trdBtnSalir,trdBtnJugarRetro);
+            btnSalir.setPosition(ANCHO/2,ALTO/2-87, Align.center);
+
+            // Programar listener del botón
+            btnReanudar.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    // QUITAR Pausa
+                    estado = EstadoJuego.JUGANDO;
+                    Gdx.app.log("PAUSA", "Reanuda por el botón de la pausa");
+                    Gdx.input.setInputProcessor(new ProcesadorEntrada());
+                }
+            });
+
+            btnSalir.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    juego.setScreen(new PantallaMenu(juego));
+                }
+            });
+
+            this.addActor(btnReanudar);
+            this.addActor(btnSalir);
+        }
+    }
+
+    private class EscenaGameOver extends Stage {
+
+        public EscenaGameOver(Viewport vista, SpriteBatch batch) {
+            super(vista, batch);
+
+           /* Texture texturaSprite = new Texture("runner/bolaFuego.png");
+            sprite = new Sprite(texturaSprite);
+            sprite.setPosition(ANCHO/2, ALTO*0.6f);*/
+
+            Pixmap pixmap = new Pixmap((int)(ANCHO*0.75f), (int)(0.8f*ALTO),
+                    Pixmap.Format.RGBA8888);
+            pixmap.setColor(0,0,0,0.5f);
+            pixmap.fillRectangle(0,0,pixmap.getWidth(), pixmap.getHeight());
+
+            Texture textura = new Texture(pixmap);
+            Image imgPausa = new Image(textura);
+            imgPausa.setPosition(ANCHO/2 - pixmap.getWidth()/2,
+                    ALTO/2 - pixmap.getHeight()/2);
+
+            this.addActor(imgPausa);        // Fondo
+
+            // Botón(es)
+            //btnAcercaDe
+            Texture texturaBtnAcercaDe = new Texture("btnsMenu/btnAcercaDe.png");
+            TextureRegionDrawable trdBtnAcercaDe = new TextureRegionDrawable(new TextureRegion(texturaBtnAcercaDe));
+            //Retroalimentación
+            Texture texturaBtnAcercaDeRetro = new Texture("btnsMenu/btnAcercaDeRetro.png");
+            TextureRegionDrawable trdBtnAcercaDeRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnAcercaDeRetro));
+            ImageButton btnAcercaDe = new ImageButton(trdBtnAcercaDe,trdBtnAcercaDeRetro);
+            btnAcercaDe.setPosition(ANCHO/2,ALTO/2-175, Align.center);
+
+            // Programar listener del botón
+            btnAcercaDe.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    // QUITAR Pausa
+                    juego.setScreen(new PantallaMenu(juego));
+                }
+            });
+
+            this.addActor(btnAcercaDe);
         }
     }
 }
