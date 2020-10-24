@@ -222,11 +222,16 @@ public class PantallaJugar extends Pantalla {
     }
 
     private void verificarChoques() {
-        Rectangle rectVaquero = vaquero.sprite.getBoundingRectangle();
-        Rectangle rectTronco = obstaculo_0.sprite.getBoundingRectangle();
-        if(rectVaquero.overlaps(rectTronco)){
-            // COLISIÓN!!!
-            vaquero.setEstado(EstadosVaquero.MURIENDO);
+        for (int i = arrObstaculos.size-1; i >= 0 ; i--) {
+            Obstaculo obstaculo = arrObstaculos.get(i);
+            if (vaquero.sprite.getBoundingRectangle().overlaps(obstaculo.sprite.getBoundingRectangle())){
+                // PERDIÓ !!!!!!!!!!!!
+                vaquero.sprite.setY(ALTO);
+                vaquero.setEstado(EstadosVaquero.MURIENDO);
+                arrObstaculos.removeIndex(i);
+                Gdx.app.log("COLISIÓN", "El vaquero choco" + i);
+                break;
+            }
         }
     }
 

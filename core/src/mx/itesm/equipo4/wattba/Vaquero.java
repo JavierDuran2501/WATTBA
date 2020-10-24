@@ -86,7 +86,7 @@ public class Vaquero extends Objeto
             TextureRegion frame = animacion.getKeyFrame(timerAnimacion);
             batch.draw(frame, sprite.getX(), sprite.getY());
 
-        } else {
+        } else if (estado == EstadosVaquero.SALTANDO) {
             //Gdx.app.log("SALTA", "tAire: " + tAire);
             tAire += 10*delta;
             float y = yBase + V0*tAire - 0.5f*G*tAire*tAire;
@@ -96,7 +96,8 @@ public class Vaquero extends Objeto
                 sprite.setY(yBase);
                 estado = EstadosVaquero.CORRIENDO;
             }
-
+        } else {
+            // Animación de muerte
         }
 
 
