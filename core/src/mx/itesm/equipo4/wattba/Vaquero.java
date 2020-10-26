@@ -91,7 +91,7 @@ public class Vaquero extends Objeto
             tAire += 10*delta;
             float y = yBase + V0*tAire - 0.5f*G*tAire*tAire;
             sprite.setY(y);
-            super.render(batch);
+            sprite.draw(batch);
             if (tAire>=tVuelo) {
                 sprite.setY(yBase);
                 estado = EstadosVaquero.CORRIENDO;

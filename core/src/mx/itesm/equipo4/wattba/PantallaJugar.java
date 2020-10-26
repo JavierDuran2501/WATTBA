@@ -107,10 +107,10 @@ public class PantallaJugar extends Pantalla {
     }
 
     private void crearTexturas() {
-        texturaDino_0 = new Texture("Obstaculos/tronco.png");
-        texturaDino_1 = new Texture("Obstaculos/tronco.png");
-        texturaDino_2 = new Texture("Obstaculos/tronco.png");
-        texturaDino_3 = new Texture("Obstaculos/tronco.png");
+        texturaDino_0 = new Texture("Dinosaurios/Dino00.png");
+        texturaDino_1 = new Texture("Dinosaurios/Dino00.png");
+        texturaDino_2 = new Texture("Dinosaurios/Dino00.png");
+        texturaDino_3 = new Texture("Dinosaurios/Dino00.png");
 
     }
 
@@ -129,8 +129,8 @@ public class PantallaJugar extends Pantalla {
     }
 
     private void crearObstaculos() {
-        Texture texturaTronco = new Texture("Obstaculos/Tronco.png");
-        obstaculo_0 = new Obstaculo(texturaTronco, ANCHO/2, 0);
+        //Texture texturaTronco = new Texture("Obstaculos/Tronco.png");
+        //obstaculo_0 = new Obstaculo(texturaTronco, ANCHO/2, 0);
     }
 
     private void crearVaquero() {
