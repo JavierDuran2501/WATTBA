@@ -5,7 +5,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -84,7 +83,7 @@ public class PantallaJugar extends Pantalla {
         crearVaquero();
         //crearObstaculos();
         crearTexto();
-        //cargarPuntos();
+        //cargarPreferencias();
         crearArrEnemigos();
         crearTexturas();
         crearHUD();
@@ -102,7 +101,6 @@ public class PantallaJugar extends Pantalla {
         musicaFondo = manager.get("Musica/musicaMezo.mp3");
         musicaFondo.setVolume(0.1f);
         musicaFondo.setLooping(true);
-        musicaFondo.play();
     }
 
     private void crearEscenaGameOver() {
@@ -132,7 +130,7 @@ public class PantallaJugar extends Pantalla {
         arrObstaculos = new Array<>();
     }
 
-    private void cargarPuntos() {
+    private void cargarPreferencias() {
         Preferences prefs = Gdx.app.getPreferences("marcador");
         puntos = prefs.getFloat("PUNTOS", 0);
     }
@@ -154,6 +152,9 @@ public class PantallaJugar extends Pantalla {
         if (estado == EstadoJuego.JUGANDO){
             actualizar();
             verificarChoques();
+            musicaFondo.play();
+        }else{
+            musicaFondo.stop();
         }
 
         //actualizarVaquero(delta);
@@ -310,11 +311,18 @@ public class PantallaJugar extends Pantalla {
                 vaquero.setEstado(EstadosVaquero.MURIENDO);
                 arrObstaculos.removeIndex(i);
                 estado = EstadoJuego.GAME_OVER;
+                guardarPreferencias();
                 Gdx.input.setInputProcessor(escenaGameOver);
                 Gdx.app.log("COLISIÓN", "El vaquero choco" + i);
                 break;
             }
         }
+    }
+
+    private void guardarPreferencias() {
+        Preferences prefs = Gdx.app.getPreferences("marcador");
+        prefs.putFloat("PUNTOS", puntos);
+        prefs.flush();  // OBLIGATORIO
     }
 
     @Override
