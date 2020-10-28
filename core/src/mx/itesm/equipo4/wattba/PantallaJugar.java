@@ -3,6 +3,9 @@ package mx.itesm.equipo4.wattba;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -71,6 +74,9 @@ public class PantallaJugar extends Pantalla {
     private float TIEMPO_CREA_OBSTACULOS = 1;
     private float tiempoBase = 1;
 
+    //Música
+    private Music musicaFondo;
+
     public PantallaJugar(Juego juego) { this.juego = juego;}
 
     @Override
@@ -85,8 +91,19 @@ public class PantallaJugar extends Pantalla {
         crearHUD();
         crearEscenaPausa();
         crearEscenaGameOver();
+        crearAudio();
 
         Gdx.input.setInputProcessor(new ProcesadorEntrada());
+    }
+
+    private void crearAudio() {
+        AssetManager manager = new AssetManager();
+        manager.load("Musica/musicaMezo.mp3", Music.class);
+        manager.finishLoading();
+        musicaFondo = manager.get("Musica/musicaMezo.mp3");
+        musicaFondo.setVolume(0.5f);
+        musicaFondo.setLooping(true);
+        musicaFondo.play();
     }
 
     private void crearEscenaGameOver() {
