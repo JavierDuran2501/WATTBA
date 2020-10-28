@@ -2,6 +2,7 @@ package mx.itesm.equipo4.wattba;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -31,6 +32,8 @@ public class PantallaMenu extends Pantalla {
     public PantallaMenu(Juego juego) {
         this.juego = juego;
     }
+
+    private Music musicaFondo;
 
     //Entra en ejecución cuando la pantalla se va a mostrar; inicializa objetos
     @Override
@@ -69,6 +72,15 @@ public class PantallaMenu extends Pantalla {
         ImageButton btnTienda = new ImageButton(trdBtnTienda,trdBtnTiendaRetro);
         btnTienda.setPosition(ANCHO/2,ALTO/2-87, Align.center);
 
+        //btnSonido
+        Texture texturaBtnSonido = new Texture("btnsPausa/btnSonido.png");
+        TextureRegionDrawable trdBtnSonido = new TextureRegionDrawable(new TextureRegion(texturaBtnSonido));
+        //Retroalimentación
+        Texture texturaBtnSonidoRetro = new Texture("btnsPausa/btnReanudarRetro.png");
+        TextureRegionDrawable trdBtnSonidoRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSonidoRetro));
+        ImageButton btnSonido = new ImageButton(trdBtnSonido);
+        btnSonido.setPosition(ANCHO*0.8f,ALTO*0.188f, Align.center);
+
         // Listeners de los botones
         //btn Acerca de
         btnAcercaDe.addListener( new ClickListener(){
@@ -100,9 +112,18 @@ public class PantallaMenu extends Pantalla {
             }
         });
 
+        btnSonido.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+
+            }
+        });
+
         escenaMenu.addActor(btnJugar);
         escenaMenu.addActor(btnAcercaDe);
         escenaMenu.addActor(btnTienda);
+        escenaMenu.addActor(btnSonido);
 
         Gdx.input.setInputProcessor(escenaMenu);
     }
