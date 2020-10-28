@@ -6,11 +6,9 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -79,10 +77,10 @@ public class PantallaJugar extends Pantalla {
     public void show() {
         this.texturaFondo = new Texture("Pantallas/Juego.jpg");
         crearVaquero();
-        crearObstaculos();
+        //crearObstaculos();
         crearTexto();
         //cargarPuntos();
-        crearEnemigos();
+        crearArrEnemigos();
         crearTexturas();
         crearHUD();
         crearEscenaPausa();
@@ -114,8 +112,7 @@ public class PantallaJugar extends Pantalla {
 
     }
 
-    private void crearEnemigos() {
-        //texturaGoomba = new Texture("runner/goomba.png");
+    private void crearArrEnemigos() {
         arrObstaculos = new Array<>();
     }
 
@@ -128,15 +125,11 @@ public class PantallaJugar extends Pantalla {
         texto = new Texto("Fuentes/game.fnt");
     }
 
-    private void crearObstaculos() {
-        //Texture texturaTronco = new Texture("Obstaculos/Tronco.png");
-        //obstaculo_0 = new Obstaculo(texturaTronco, ANCHO/2, 0);
-    }
 
     private void crearVaquero() {
       Texture texturaVaquero = new Texture("Vaquero/Correr2.png");
       Texture texturaMuriendo = new Texture("Vaquero/Dead__000.png");
-      vaquero = new Vaquero(texturaVaquero, texturaMuriendo, 0, 0);
+      vaquero = new Vaquero(texturaVaquero, texturaMuriendo, 0, 0, 200, 244);
     }
 
     @Override
@@ -230,21 +223,30 @@ public class PantallaJugar extends Pantalla {
             }
             int texturaRandom = MathUtils.random(0,4);
             alturaObstaculo = 0;
+            int w = 0, h = 0;
             switch (epoca){
                 case MESOZOICA:
                     switch(texturaRandom){
                         case 0:
                             texturaGeneral = texturaDino_0;
+                            w = 190;
+                            h = 200;
                             break;
                         case 1:
                             texturaGeneral = texturaDino_1;
+                            w = 190;
+                            h = 200;
                             break;
                         case 2:
                             texturaGeneral = texturaDino_2;
+                            w = 190;
+                            h = 200;
                             break;
                         default:
                             alturaObstaculo = 30;
                             texturaGeneral = texturaDino_3;
+                            w = 190;
+                            h = 200;
                             break;
                     }
                     break;
@@ -262,7 +264,7 @@ public class PantallaJugar extends Pantalla {
                     break;
             }
 
-            Obstaculo obstaculo = new Obstaculo(texturaGeneral, ANCHO + 50, alturaObstaculo);
+            Obstaculo obstaculo = new Obstaculo(texturaGeneral, ANCHO + 50, alturaObstaculo, w, h);
             arrObstaculos.add(obstaculo);
         }
 
@@ -476,9 +478,19 @@ public class PantallaJugar extends Pantalla {
             Texture texturaBtnAcercaDeRetro = new Texture("btnsMenu/btnAcercaDeRetro.png");
             TextureRegionDrawable trdBtnAcercaDeRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnAcercaDeRetro));
             ImageButton btnAcercaDe = new ImageButton(trdBtnAcercaDe,trdBtnAcercaDeRetro);
-            btnAcercaDe.setPosition(ANCHO/2,ALTO/2-175, Align.center);
+            btnAcercaDe.setPosition(ANCHO/2,ALTO/2-87, Align.center);
 
-            // Programar listener del botón
+            //btnReiniciar
+            Texture texturaBtnReiniciar = new Texture("btnsMenu/btnAcercaDe.png");
+            TextureRegionDrawable trdBtnReiniciar= new TextureRegionDrawable(new TextureRegion(texturaBtnReiniciar));
+            //Retroalimentación
+            Texture texturaBtnReiniciarRetro = new Texture("btnsMenu/btnAcercaDeRetro.png");
+            TextureRegionDrawable trdBtnReiniciarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnReiniciarRetro));
+            ImageButton btnReiniciar = new ImageButton(trdBtnReiniciar,trdBtnReiniciarRetro);
+            btnReiniciar.setPosition(ANCHO/2,ALTO/2, Align.center);
+
+            // Programar listener del los botones
+            //btnAcercaDe
             btnAcercaDe.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -488,7 +500,18 @@ public class PantallaJugar extends Pantalla {
                 }
             });
 
+            //btnReiniciar
+            btnReiniciar.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    // QUITAR Pausa
+                    juego.setScreen(new PantallaJugar(juego));
+                }
+            });
+
             this.addActor(btnAcercaDe);
+            this.addActor(btnReiniciar);
         }
     }
 }

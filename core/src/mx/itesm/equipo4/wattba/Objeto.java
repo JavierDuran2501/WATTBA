@@ -18,11 +18,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
     private Animation<TextureRegion> animacion;
     private float timerAnimacion;
 
-    public Objeto(Texture textura, float x, float y) {
+    public Objeto(Texture textura, float x, float y, int w, int h) {
 
         TextureRegion region = new TextureRegion(textura);
-        TextureRegion[][] texturasFrame = region.split(450, 472);
-        sprite = new Sprite(textura);
+        TextureRegion[][] texturasFrame = region.split(w, h);
+        sprite = new Sprite(texturasFrame[0][0]);
         sprite.setPosition(x, y);
 
         //Animación
