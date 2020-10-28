@@ -56,11 +56,10 @@ public class PantallaJugar extends Pantalla {
     //Epoca
     private Epocas epoca = Epocas.MESOZOICA;
 
-    private Texture texturaGeneral;
-
     //Obstaculos
     private Obstaculo obstaculo_0;
     private int alturaObstaculo = 0;
+    private Texture texturaGeneral;
 
     // Textura Dinosaurios
     private Texture texturaDino_0;
@@ -72,7 +71,7 @@ public class PantallaJugar extends Pantalla {
     private Array<Obstaculo> arrObstaculos;
     private float timerCrearObstaculos;
     private float TIEMPO_CREA_OBSTACULOS = 1;
-    private float tiempoBase = 1;
+    private float tiempoBase = 1.5f;
 
     //Música
     private Music musicaFondo;
@@ -101,7 +100,7 @@ public class PantallaJugar extends Pantalla {
         manager.load("Musica/musicaMezo.mp3", Music.class);
         manager.finishLoading();
         musicaFondo = manager.get("Musica/musicaMezo.mp3");
-        musicaFondo.setVolume(0.5f);
+        musicaFondo.setVolume(0.1f);
         musicaFondo.setLooping(true);
         musicaFondo.play();
     }
@@ -122,10 +121,10 @@ public class PantallaJugar extends Pantalla {
     }
 
     private void crearTexturas() {
-        texturaDino_0 = new Texture("Dinosaurios/Dino00.png");
-        texturaDino_1 = new Texture("Dinosaurios/Dino00.png");
-        texturaDino_2 = new Texture("Dinosaurios/Dino00.png");
-        texturaDino_3 = new Texture("Dinosaurios/Dino00.png");
+        texturaDino_0 = new Texture("Dinosaurios/Dino001.png");
+        texturaDino_1 = new Texture("Dinosaurios/Dino001.png");
+        texturaDino_2 = new Texture("Dinosaurios/Dino001.png");
+        texturaDino_3 = new Texture("Dinosaurios/Dino001.png");
 
     }
 
@@ -246,24 +245,24 @@ public class PantallaJugar extends Pantalla {
                     switch(texturaRandom){
                         case 0:
                             texturaGeneral = texturaDino_0;
-                            w = 190;
-                            h = 200;
+                            w = 286;
+                            h = 300;
                             break;
                         case 1:
                             texturaGeneral = texturaDino_1;
-                            w = 190;
-                            h = 200;
+                            w = 286;
+                            h = 300;
                             break;
                         case 2:
                             texturaGeneral = texturaDino_2;
-                            w = 190;
-                            h = 200;
+                            w = 286;
+                            h = 300;
                             break;
                         default:
-                            alturaObstaculo = 30;
+                            //alturaObstaculo = 30;
                             texturaGeneral = texturaDino_3;
-                            w = 190;
-                            h = 200;
+                            w = 286;
+                            h = 300;
                             break;
                     }
                     break;
@@ -489,26 +488,26 @@ public class PantallaJugar extends Pantalla {
 
             // Botón(es)
             //btnAcercaDe
-            Texture texturaBtnAcercaDe = new Texture("btnsMenu/btnAcercaDe.png");
-            TextureRegionDrawable trdBtnAcercaDe = new TextureRegionDrawable(new TextureRegion(texturaBtnAcercaDe));
+            Texture texturaBtnSalir = new Texture("btnsGameOver/btnSalir.png");
+            TextureRegionDrawable trdBtnSalir = new TextureRegionDrawable(new TextureRegion(texturaBtnSalir));
             //Retroalimentación
-            Texture texturaBtnAcercaDeRetro = new Texture("btnsMenu/btnAcercaDeRetro.png");
-            TextureRegionDrawable trdBtnAcercaDeRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnAcercaDeRetro));
-            ImageButton btnAcercaDe = new ImageButton(trdBtnAcercaDe,trdBtnAcercaDeRetro);
-            btnAcercaDe.setPosition(ANCHO/2,ALTO/2-87, Align.center);
+            Texture texturaBtnSalirRetro = new Texture("btnsGameOver/btnSalirRetro.png");
+            TextureRegionDrawable trdBtnSalirRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSalirRetro));
+            ImageButton btnSalir = new ImageButton(trdBtnSalir,trdBtnSalirRetro);
+            btnSalir.setPosition(ANCHO/2,ALTO/2-87, Align.center);
 
             //btnReiniciar
-            Texture texturaBtnReiniciar = new Texture("btnsMenu/btnAcercaDe.png");
+            Texture texturaBtnReiniciar = new Texture("btnsGameOver/btnReiniciar.png");
             TextureRegionDrawable trdBtnReiniciar= new TextureRegionDrawable(new TextureRegion(texturaBtnReiniciar));
             //Retroalimentación
-            Texture texturaBtnReiniciarRetro = new Texture("btnsMenu/btnAcercaDeRetro.png");
+            Texture texturaBtnReiniciarRetro = new Texture("btnsGameOver/btnReinciarRetro.png");
             TextureRegionDrawable trdBtnReiniciarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnReiniciarRetro));
             ImageButton btnReiniciar = new ImageButton(trdBtnReiniciar,trdBtnReiniciarRetro);
             btnReiniciar.setPosition(ANCHO/2,ALTO/2, Align.center);
 
             // Programar listener del los botones
             //btnAcercaDe
-            btnAcercaDe.addListener(new ClickListener() {
+            btnSalir.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
@@ -527,7 +526,7 @@ public class PantallaJugar extends Pantalla {
                 }
             });
 
-            this.addActor(btnAcercaDe);
+            this.addActor(btnSalir);
             this.addActor(btnReiniciar);
         }
     }

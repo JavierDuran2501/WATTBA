@@ -19,7 +19,7 @@ public class Vaquero extends Objeto
     // Salto
     private float yBase;        // y del piso
     private float tAire;        // tiempo de simulación < tVuelo
-    private final float V0 = 125;
+    private final float V0 = 145;
     private final float G = 20;
     private float tVuelo;
 
