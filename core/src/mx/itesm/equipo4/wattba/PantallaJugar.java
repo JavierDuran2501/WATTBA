@@ -201,6 +201,8 @@ public class PantallaJugar extends Pantalla {
             batch.setProjectionMatrix(camaraHUD.combined);
             escenaPausa.draw();
             batch.begin();
+            texto.mostrarMensaje(batch, "Pausa",ANCHO/2,
+                    ALTO*0.70f);
             batch.end();
         }
 
@@ -209,6 +211,8 @@ public class PantallaJugar extends Pantalla {
             batch.setProjectionMatrix(camaraHUD.combined);
             escenaGameOver.draw();
             batch.begin();
+            texto.mostrarMensaje(batch, "Game Over",ANCHO/2,
+                    ALTO*0.70f);
             batch.end();
         }
     }
@@ -519,6 +523,8 @@ public class PantallaJugar extends Pantalla {
             this.addActor(btnReanudar);
             this.addActor(btnSalir);
             this.addActor(btnSonido);
+
+
 
         }
 
