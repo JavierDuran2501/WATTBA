@@ -102,6 +102,15 @@ public class PantallaJugar extends Pantalla {
         musicaFondo = manager.get("Musica/musicaMezo.mp3");
         musicaFondo.setVolume(0.1f);
         musicaFondo.setLooping(true);
+        controlMusica();
+    }
+
+    private void controlMusica() {
+        Preferences pref = Gdx.app.getPreferences("sonido");
+        if (pref.getBoolean("sonido"))
+            musicaFondo.play();
+        else
+            musicaFondo.stop();
     }
 
     private void crearEscenaGameOver() {
@@ -153,7 +162,7 @@ public class PantallaJugar extends Pantalla {
         if (estado == EstadoJuego.JUGANDO){
             actualizar();
             verificarChoques();
-            musicaFondo.play();
+            controlMusica();
         }else{
             musicaFondo.stop();
         }
@@ -324,7 +333,8 @@ public class PantallaJugar extends Pantalla {
 
     private void guardarPreferencias() {
         Preferences prefs = Gdx.app.getPreferences("marcador");
-        prefs.putFloat("PUNTOS", puntos);
+        if(prefs.getFloat("PUNTOS") < puntos)
+            prefs.putFloat("PUNTOS", puntos);
         //prefs = Gdx.app.getPreferences("marcador");
         prefs.flush();  // OBLIGATORIO
     }
@@ -440,7 +450,7 @@ public class PantallaJugar extends Pantalla {
             //Retroalimentación
             Texture texturaBtnReanudarRetro = new Texture("btnsPausa/btnReanudarRetro.png");
             TextureRegionDrawable trdBtnReanudarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnReanudarRetro));
-            ImageButton btnReanudar = new ImageButton(trdBtnReanudar,trdBtnReanudarRetro);
+            final ImageButton btnReanudar = new ImageButton(trdBtnReanudar,trdBtnReanudarRetro);
             btnReanudar.setPosition(ANCHO/2,ALTO/2, Align.center);
 
             //btnSalir
@@ -456,9 +466,9 @@ public class PantallaJugar extends Pantalla {
             Texture texturaBtnSonido = new Texture("btnsPausa/btnSonido.png");
             TextureRegionDrawable trdBtnSonido = new TextureRegionDrawable(new TextureRegion(texturaBtnSonido));
             //Retroalimentación
-            Texture texturaBtnSonidoRetro = new Texture("btnsPausa/btnReanudarRetro.png");
+            Texture texturaBtnSonidoRetro = new Texture("btnsPausa/btnSonidoRetro.png");
             TextureRegionDrawable trdBtnSonidoRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSonidoRetro));
-            ImageButton btnSonido = new ImageButton(trdBtnSonido);
+            ImageButton btnSonido = new ImageButton(trdBtnSonido, trdBtnSonidoRetro);
             btnSonido.setPosition(ANCHO*0.8f,ALTO*0.188f, Align.center);
 
 
@@ -486,13 +496,7 @@ public class PantallaJugar extends Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-                    if (musicaFondo.isPlaying()){
-                        Gdx.app.log("MUSICA:","silenciada");
-                        musicaFondo.stop();
-                    } else {
-                        Gdx.app.log("MUSICA:","Comienza a sonar");
-                        musicaFondo.play();
-                    }
+                    guardarPreferenciaSonido();
                 }
             });
 
@@ -501,7 +505,20 @@ public class PantallaJugar extends Pantalla {
             this.addActor(btnSonido);
 
         }
+
+        private void guardarPreferenciaSonido() {
+            Preferences prefs = Gdx.app.getPreferences("sonido");
+            if (prefs.getBoolean("sonido"))
+            {
+                prefs.putBoolean("sonido", false);
+
+            }else {
+                prefs.putBoolean("sonido", true);
+            }
+
+        }
     }
+
 
     private class EscenaGameOver extends Stage {
 
