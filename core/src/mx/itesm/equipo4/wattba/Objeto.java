@@ -35,8 +35,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
         timerAnimacion = 0;
     }
 
-    public Objeto(Texture textura, float x, float y, int n) {
-
+    public Objeto(Texture textura, float x, float y) {
+        sprite = new Sprite(textura);
+        sprite.setPosition(x, y);
     }
 
     public Objeto() {
@@ -50,7 +51,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
         batch.draw(frame, sprite.getX(), sprite.getY());
         //sprite.draw(batch);
 
+    }
 
+    public void renderSinAnimacion(SpriteBatch batch){
+        sprite.draw(batch);
     }
 
 }

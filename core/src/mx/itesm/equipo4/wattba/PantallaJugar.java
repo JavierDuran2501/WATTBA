@@ -57,9 +57,11 @@ public class PantallaJugar extends Pantalla {
     private Epocas epoca = Epocas.MESOZOICA;
 
     //Obstaculos
-    private Obstaculo obstaculo_0;
     private int alturaObstaculo = 0;
     private Texture texturaGeneral;
+
+    //Items
+    private Texture texturaItem;
 
     // Textura Dinosaurios
     private Texture texturaDino_0;
@@ -82,9 +84,7 @@ public class PantallaJugar extends Pantalla {
     public void show() {
         this.texturaFondo = new Texture("Pantallas/Juego.jpg");
         crearVaquero();
-        //crearObstaculos();
         crearTexto();
-        //cargarPreferencias();
         crearArrEnemigos();
         crearTexturas();
         crearHUD();
@@ -129,10 +129,15 @@ public class PantallaJugar extends Pantalla {
     }
 
     private void crearTexturas() {
+        // Dinosaurios
         texturaDino_0 = new Texture("Dinosaurios/Dino001.png");
         texturaDino_1 = new Texture("Dinosaurios/Dino001.png");
         texturaDino_2 = new Texture("Dinosaurios/Dino001.png");
         texturaDino_3 = new Texture("Dinosaurios/Dino001.png");
+
+        //Items
+        texturaItem = new Texture("Items/ItemRojo.png");
+
 
     }
 
@@ -140,10 +145,6 @@ public class PantallaJugar extends Pantalla {
         arrObstaculos = new Array<>();
     }
 
-    private void cargarPreferencias() {
-        Preferences prefs = Gdx.app.getPreferences("marcador");
-        puntos = prefs.getFloat("PUNTOS", 0);
-    }
 
     private void crearTexto() {
         texto = new Texto("Fuentes/game.fnt");
@@ -214,15 +215,16 @@ public class PantallaJugar extends Pantalla {
 
     private void dibujarEnemigos() {
         for (Obstaculo obstaculo: arrObstaculos) {
-            obstaculo.render(batch);
+            if (obstaculo.getTipo() == 0)
+                obstaculo.render(batch);
+            else
+                obstaculo.renderSinAnimacion(batch);
             if (estado == EstadoJuego.JUGANDO)
                 obstaculo.moverIzquierda();
         }
     }
 
     private void dibujarTexto() {
-        //texto.mostrarMensaje(batch, "What a time to be alive", ANCHO/2, 0.9f*ALTO);
-        //puntos += Gdx.graphics.getDeltaTime();
         int puntosInt = (int)puntos;
         texto.mostrarMensaje(batch, "" + puntosInt, ANCHO*0.9f, 0.9f*ALTO);
     }
@@ -250,7 +252,8 @@ public class PantallaJugar extends Pantalla {
             if(tiempoBase>0){
                 tiempoBase -= -0.01f;
             }
-            int texturaRandom = MathUtils.random(0,4);
+
+            int texturaRandom = MathUtils.random(0,3);
             alturaObstaculo = 0;
             int w = 0, h = 0;
             switch (epoca){
@@ -273,10 +276,16 @@ public class PantallaJugar extends Pantalla {
                             break;
                         default:
                             //alturaObstaculo = 30;
-                            texturaGeneral = texturaDino_3;
-                            w = 286;
-                            h = 300;
-                            break;
+                            if (MathUtils.random(0,2) == 0){
+                                texturaRandom = 10;
+                                Gdx.app.log("ITEM", ""+ texturaRandom);
+                            }else{
+                                texturaGeneral = texturaDino_3;
+                                w = 286;
+                                h = 300;
+                                break;
+                            }
+
                     }
                     break;
                 case PREHISTORIA:
@@ -293,8 +302,14 @@ public class PantallaJugar extends Pantalla {
                     break;
             }
 
-            Obstaculo obstaculo = new Obstaculo(texturaGeneral, ANCHO + 50, alturaObstaculo, w, h);
+            Obstaculo obstaculo;
+            if (texturaRandom == 10){
+                obstaculo = new Obstaculo(texturaItem, ANCHO + 50, alturaObstaculo, 1);
+            }else{
+                obstaculo = new Obstaculo(texturaGeneral, ANCHO + 50, alturaObstaculo, w, h, 0);
+            }
             arrObstaculos.add(obstaculo);
+
         }
 
         for (int i = arrObstaculos.size-1; i >= 0; i--) {
@@ -305,28 +320,29 @@ public class PantallaJugar extends Pantalla {
         }
     }
 
-    private void actualizarVaquero(float delta) {
-        timerAnimaVaquero += delta;
-        if(timerAnimaVaquero >= TIEMPO_FRAME_VAQUERO){
-            // Checamos cambios de estado
-
-            timerAnimaVaquero = 0;
-        }
-    }
-
     private void verificarChoques() {
         for (int i = arrObstaculos.size-1; i >= 0 ; i--) {
             Obstaculo obstaculo = arrObstaculos.get(i);
             if (vaquero.sprite.getBoundingRectangle().overlaps(obstaculo.sprite.getBoundingRectangle())){
-                // PERDIÓ !!!!!!!!!!!!
-                vaquero.sprite.setY(ALTO);
-                vaquero.setEstado(EstadosVaquero.MURIENDO);
-                arrObstaculos.removeIndex(i);
-                estado = EstadoJuego.GAME_OVER;
-                guardarPreferencias();
-                Gdx.input.setInputProcessor(escenaGameOver);
-                Gdx.app.log("COLISIÓN", "El vaquero choco" + i);
-                break;
+                // CHOCO, hay que revisar si es obstaculo o item
+                if(obstaculo.getTipo() == 1)   // ITEM!
+                {
+                    arrObstaculos.removeIndex(i);
+                    puntos += 20;
+                    Gdx.app.log("COLISION CON ITEM", "El vaquero choco con ITEM");
+                }
+                // Obstaculo
+                else{
+                    vaquero.sprite.setY(ALTO);
+                    vaquero.setEstado(EstadosVaquero.MURIENDO);
+                    arrObstaculos.removeIndex(i);
+                    estado = EstadoJuego.GAME_OVER;
+                    guardarPreferencias();
+                    Gdx.input.setInputProcessor(escenaGameOver);
+                    Gdx.app.log("COLISION CON OBSTACULO", "El vaquero choco con obstaculo");
+                    break;
+                }
+
             }
         }
     }

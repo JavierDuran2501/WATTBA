@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.Align;
 
 /*
 Pantalla de menú
-Autor: Javier Alejandro Durán Díaz
  */
 //Creación de camara, batch, texturas, render y dispose.
 
