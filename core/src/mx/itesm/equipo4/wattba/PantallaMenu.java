@@ -23,6 +23,7 @@ public class PantallaMenu extends Pantalla {
 
     private final Juego juego;
 
+
     //Fondo de menú principalx
     private Texture texturaFondo;
 
@@ -34,7 +35,7 @@ public class PantallaMenu extends Pantalla {
     private float puntos;
 
     // Musica
-    private Music musicaFondo;
+    //private Music musicaFondo;
 
 
     public PantallaMenu(Juego juego) {
@@ -52,7 +53,7 @@ public class PantallaMenu extends Pantalla {
     }
 
     private void crearAudio() {
-        AssetManager manager = new AssetManager();
+        /*AssetManager manager = new AssetManager();
         manager.load("Musica/musicaMenu.mp3", Music.class);
         manager.finishLoading();
         musicaFondo = manager.get("Musica/musicaMenu.mp3");
@@ -60,6 +61,8 @@ public class PantallaMenu extends Pantalla {
         musicaFondo.setLooping(true);
 
 
+         */
+        juego.getManager().load("Musica/musicaMenu.mp3",Music.class);
     }
 
     private void crearTexto() {
@@ -75,37 +78,45 @@ public class PantallaMenu extends Pantalla {
         escenaMenu = new Stage(vista);
 
         //btnJugar
-        Texture texturaBtnJugar = new Texture("btnsMenu/btnJugar.png");
+        //Texture texturaBtnJugar = new Texture("btnsMenu/btnJugar.png");
+        Texture texturaBtnJugar = juego.getManager().get("btnsMenu/btnJugar.png");
         TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable(new TextureRegion(texturaBtnJugar));
         //Retroalimentación
-        Texture texturaBtnJugarRetro = new Texture("btnsMenu/btnJugarRetro.png");
+        //Texture texturaBtnJugarRetro = new Texture("btnsMenu/btnJugarRetro.png");
+        Texture texturaBtnJugarRetro = juego.getManager().get("btnsMenu/btnJugarRetro.png");
         TextureRegionDrawable trdBtnJugarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnJugarRetro));
         ImageButton btnJugar = new ImageButton(trdBtnJugar,trdBtnJugarRetro);
         btnJugar.setPosition(ANCHO/2,ALTO/2, Align.center);
 
         //btnAcercaDe
-        Texture texturaBtnAcercaDe = new Texture("btnsMenu/btnAcercaDe.png");
+        //Texture texturaBtnAcercaDe = new Texture("btnsMenu/btnAcercaDe.png");
+        Texture texturaBtnAcercaDe = juego.getManager().get("btnsMenu/btnAcercaDe.png");
         TextureRegionDrawable trdBtnAcercaDe = new TextureRegionDrawable(new TextureRegion(texturaBtnAcercaDe));
         //Retroalimentación
-        Texture texturaBtnAcercaDeRetro = new Texture("btnsMenu/btnAcercaDeRetro.png");
+        //Texture texturaBtnAcercaDeRetro = new Texture("btnsMenu/btnAcercaDeRetro.png");
+        Texture texturaBtnAcercaDeRetro = juego.getManager().get("btnsMenu/btnAcercaDeRetro.png");
         TextureRegionDrawable trdBtnAcercaDeRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnAcercaDeRetro));
         ImageButton btnAcercaDe = new ImageButton(trdBtnAcercaDe,trdBtnAcercaDeRetro);
         btnAcercaDe.setPosition(ANCHO/2,ALTO/2-175, Align.center);
 
         //btnInstrucciones
-        Texture texturaBtnInstrucciones = new Texture("btnsMenu/btnInstrucciones.png");
+        //Texture texturaBtnInstrucciones = new Texture("btnsMenu/btnInstrucciones.png");
+        Texture texturaBtnInstrucciones = juego.getManager().get("btnsMenu/btnInstrucciones.png");
         TextureRegionDrawable trdBtnInstrucciones = new TextureRegionDrawable(new TextureRegion(texturaBtnInstrucciones));
         //Retroalimentación
-        Texture texturaBtnInstruccionesRetro = new Texture("btnsMenu/btnInstruccionesRetro.png");
+        //Texture texturaBtnInstruccionesRetro = new Texture("btnsMenu/btnInstruccionesRetro.png");
+        Texture texturaBtnInstruccionesRetro = juego.getManager().get("btnsMenu/btnInstruccionesRetro.png");
         TextureRegionDrawable trdBtnInstruccionesRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnInstruccionesRetro));
         ImageButton btnInstrucciones = new ImageButton(trdBtnInstrucciones,trdBtnInstruccionesRetro);
         btnInstrucciones.setPosition(ANCHO/2,ALTO/2-87, Align.center);
 
         //btnSonido
-        Texture texturaBtnSonido = new Texture("btnsPausa/btnSonido.png");
+        //Texture texturaBtnSonido = new Texture("btnsPausa/btnSonido.png");
+        Texture texturaBtnSonido = juego.getManager().get("btnsPausa/btnSonido.png");
         TextureRegionDrawable trdBtnSonido = new TextureRegionDrawable(new TextureRegion(texturaBtnSonido));
         //Retroalimentación
-        Texture texturaBtnSonidoRetro = new Texture("btnsPausa/btnSonidoRetro.png");
+        //Texture texturaBtnSonidoRetro = new Texture("btnsPausa/btnSonidoRetro.png");
+        Texture texturaBtnSonidoRetro = juego.getManager().get("btnsPausa/btnSonidoRetro.png");
         TextureRegionDrawable trdBtnSonidoRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSonidoRetro));
         ImageButton btnSonido = new ImageButton(trdBtnSonido, trdBtnSonidoRetro);
         btnSonido.setPosition(ANCHO*0.8f,ALTO*0.188f, Align.center);
@@ -137,7 +148,8 @@ public class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 // Cambiamos de pantalla
-                musicaFondo.stop();
+                //musicaMenu.stop();
+
                 juego.setScreen(new PantallaJugar(juego));
             }
         });
@@ -176,7 +188,7 @@ public class PantallaMenu extends Pantalla {
     @Override
     public void render(float delta) {
         borrarPantalla();
-        controlMusica();
+        //controlMusica();
         batch.setProjectionMatrix(camara.combined);
 
         batch.begin();
@@ -189,11 +201,13 @@ public class PantallaMenu extends Pantalla {
     }
 
     private void controlMusica() {
-        Preferences pref = Gdx.app.getPreferences("sonido");
+        /*Preferences pref = Gdx.app.getPreferences("sonido");
         if (pref.getBoolean("sonido"))
             musicaFondo.play();
         else
             musicaFondo.stop();
+
+         */
     }
 
     private void dibujarTexto() {
