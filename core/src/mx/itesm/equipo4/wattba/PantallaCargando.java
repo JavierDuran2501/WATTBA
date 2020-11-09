@@ -18,6 +18,7 @@ public class PantallaCargando extends Pantalla
 
     //Música
     private Music musicaMenu;
+    private Music musicaJuego;
 
     // Referencia al juego
     private Juego juego;    // Para hacer setScreen
@@ -81,7 +82,16 @@ public class PantallaCargando extends Pantalla
     }
 
     private void cargarRecursosRunner() {
-
+        manager.load("Pantallas/Juego.jpg",Texture.class);
+        manager.load("Musica/musicaMezo.mp3", Music.class);
+        manager.load("Dinosaurios/Dino001.png",Texture.class);
+        manager.load("Items/ItemRojo.png",Texture.class);
+        manager.load("Vaquero/Correr2.png",Texture.class);
+        manager.finishLoading();
+        musicaJuego = manager.get("Musica/musicaMezo.mp3");
+        musicaJuego.setVolume(0.1f);
+        musicaJuego.play();
+        musicaJuego.setLooping(true);
     }
 
     @Override
@@ -115,6 +125,10 @@ public class PantallaCargando extends Pantalla
                     juego.setScreen(new PantallaMenu(juego));
                     break;
                 // Agregar las otras pantallas
+                case JUEGO:
+                    juego.setScreen(new PantallaJugar(juego));
+                    Music musica = juego.getManager().get("Musica/musicaMenu.mp3");
+                    musica.stop();
             }
         }
 

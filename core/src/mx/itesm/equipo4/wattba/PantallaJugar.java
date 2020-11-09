@@ -65,9 +65,13 @@ public class PantallaJugar extends Pantalla {
 
     // Textura Dinosaurios
     private Texture texturaDino_0;
+    //Texture texturaDino_0 = juego.getManager().get("Dinosaurios/Dino001.png");
     private Texture texturaDino_1;
+    //private Texture texturaDino_1 = juego.getManager().get("Dinosaurios/Dino001.png");
     private Texture texturaDino_2;
+    //private Texture texturaDino_2 = juego.getManager().get("Dinosaurios/Dino001.png");
     private Texture texturaDino_3;
+    //private Texture texturaDino_3 = juego.getManager().get("Dinosaurios/Dino001.png");
 
     // Arreglo Enemigos
     private Array<Obstaculo> arrObstaculos;
@@ -76,7 +80,7 @@ public class PantallaJugar extends Pantalla {
     private float tiempoBase = 1.5f;
 
     //Música
-    private Music musicaFondo;
+    private Music musicaJuego;
 
     public PantallaJugar(Juego juego) { this.juego = juego;}
 
@@ -96,21 +100,25 @@ public class PantallaJugar extends Pantalla {
     }
 
     private void crearAudio() {
-        AssetManager manager = new AssetManager();
+        /*AssetManager manager = new AssetManager();
         manager.load("Musica/musicaMezo.mp3", Music.class);
         manager.finishLoading();
         musicaFondo = manager.get("Musica/musicaMezo.mp3");
         musicaFondo.setVolume(0.1f);
         musicaFondo.setLooping(true);
         controlMusica();
+         */
+        juego.getManager().load("Musica/musicaMezo.mp3",Music.class);
     }
 
     private void controlMusica() {
-        Preferences pref = Gdx.app.getPreferences("sonido");
+        /*Preferences pref = Gdx.app.getPreferences("sonido");
         if (pref.getBoolean("sonido"))
             musicaFondo.play();
         else
             musicaFondo.stop();
+
+         */
     }
 
     private void crearEscenaGameOver() {
@@ -130,13 +138,18 @@ public class PantallaJugar extends Pantalla {
 
     private void crearTexturas() {
         // Dinosaurios
-        texturaDino_0 = new Texture("Dinosaurios/Dino001.png");
-        texturaDino_1 = new Texture("Dinosaurios/Dino001.png");
-        texturaDino_2 = new Texture("Dinosaurios/Dino001.png");
-        texturaDino_3 = new Texture("Dinosaurios/Dino001.png");
+        //texturaDino_0 = new Texture("Dinosaurios/Dino001.png");
+        texturaDino_0 = juego.getManager().get("Dinosaurios/Dino001.png");
+        //texturaDino_1 = new Texture("Dinosaurios/Dino001.png");
+        //texturaDino_2 = new Texture("Dinosaurios/Dino001.png");
+        //texturaDino_3 = new Texture("Dinosaurios/Dino001.png");
+        texturaDino_1 = juego.getManager().get("Dinosaurios/Dino001.png");
+        texturaDino_2 = juego.getManager().get("Dinosaurios/Dino001.png");
+        texturaDino_3 = juego.getManager().get("Dinosaurios/Dino001.png");
 
         //Items
-        texturaItem = new Texture("Items/ItemRojo.png");
+        //texturaItem = new Texture("Items/ItemRojo.png");
+        texturaItem = juego.getManager().get("Items/ItemRojo.png");
 
 
     }
@@ -152,8 +165,10 @@ public class PantallaJugar extends Pantalla {
 
 
     private void crearVaquero() {
-      Texture texturaVaquero = new Texture("Vaquero/Correr2.png");
+      //Texture texturaVaquero = new Texture("Vaquero/Correr2.png");
       Texture texturaMuriendo = new Texture("Vaquero/Dead__000.png");
+      Texture texturaVaquero = juego.getManager().get("Vaquero/Correr2.png");
+      //Texture texturaMuriendo = juego.getManager().get("Vaquero/Dead")
       vaquero = new Vaquero(texturaVaquero, texturaMuriendo, 0, 0, 200, 244);
     }
 
@@ -165,7 +180,7 @@ public class PantallaJugar extends Pantalla {
             verificarChoques();
             controlMusica();
         }else{
-            musicaFondo.stop();
+            //musicaJuego.stop();
         }
 
 
