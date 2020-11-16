@@ -87,7 +87,16 @@ public class PantallaCargando extends Pantalla
         manager.load("Dinosaurios/Dino001.png",Texture.class);
         manager.load("Items/ItemRojo.png",Texture.class);
         manager.load("Vaquero/Correr2.png",Texture.class);
+        manager.load("btnsPausa/btnReanudar.png",Texture.class);
+        manager.load("btnsPausa/btnReanudarRetro.png",Texture.class);
+        manager.load("btnsPausa/btnSalir.png",Texture.class);
+        manager.load("btnsPausa/btnSalirRetro.png",Texture.class);
+        manager.load("btnsPausa/btnSonido.png",Texture.class);
+        manager.load("btnsPausa/btnSonidoRetro.png",Texture.class);
+        manager.load("btnsPausa/btnReiniciar.png",Texture.class);
+        manager.load("btnsPausa/btnReiniciarRetro.png",Texture.class);
         manager.finishLoading();
+
         musicaJuego = manager.get("Musica/musicaMezo.mp3");
         musicaJuego.setVolume(0.1f);
         musicaJuego.play();

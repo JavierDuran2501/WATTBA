@@ -480,28 +480,34 @@ public class PantallaJugar extends Pantalla {
 
             // Botón(es)
             //btnReanudar
-            Texture texturaBtnReanudar = new Texture("btnsPausa/btnReanudar.png");
+            //Texture texturaBtnReanudar = new Texture("btnsPausa/btnReanudar.png");
+            Texture texturaBtnReanudar = juego.getManager().get("btnsPausa/btnReanudar.png");
             TextureRegionDrawable trdBtnReanudar = new TextureRegionDrawable(new TextureRegion(texturaBtnReanudar));
             //Retroalimentación
-            Texture texturaBtnReanudarRetro = new Texture("btnsPausa/btnReanudarRetro.png");
+            //Texture texturaBtnReanudarRetro = new Texture("btnsPausa/btnReanudarRetro.png");
+            Texture texturaBtnReanudarRetro = juego.getManager().get("btnsPausa/btnReanudarRetro.png");
             TextureRegionDrawable trdBtnReanudarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnReanudarRetro));
             final ImageButton btnReanudar = new ImageButton(trdBtnReanudar,trdBtnReanudarRetro);
             btnReanudar.setPosition(ANCHO/2,ALTO/2, Align.center);
 
             //btnSalir
-            Texture texturaBtnSalir = new Texture("btnsPausa/btnSalir.png");
+            //Texture texturaBtnSalir = new Texture("btnsPausa/btnSalir.png");
+            Texture texturaBtnSalir = juego.getManager().get("btnsPausa/btnSalir.png");
             TextureRegionDrawable trdBtnSalir = new TextureRegionDrawable(new TextureRegion(texturaBtnSalir));
             //Retroalimentación
-            Texture texturaBtnSalirRetro = new Texture("btnsPausa/btnSalirRetro.png");
+            //Texture texturaBtnSalirRetro = new Texture("btnsPausa/btnSalirRetro.png");
+            Texture texturaBtnSalirRetro = juego.getManager().get("btnsPausa/btnSalirRetro.png");
             TextureRegionDrawable trdBtnJugarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSalirRetro));
             ImageButton btnSalir = new ImageButton(trdBtnSalir,trdBtnJugarRetro);
             btnSalir.setPosition(ANCHO/2,ALTO/2-87, Align.center);
 
             //btnSonido
-            Texture texturaBtnSonido = new Texture("btnsPausa/btnSonido.png");
+            //Texture texturaBtnSonido = new Texture("btnsPausa/btnSonido.png");
+            Texture texturaBtnSonido = juego.getManager().get("btnsPausa/btnSonido.png");
             TextureRegionDrawable trdBtnSonido = new TextureRegionDrawable(new TextureRegion(texturaBtnSonido));
             //Retroalimentación
-            Texture texturaBtnSonidoRetro = new Texture("btnsPausa/btnSonidoRetro.png");
+            //Texture texturaBtnSonidoRetro = new Texture("btnsPausa/btnSonidoRetro.png");
+            Texture texturaBtnSonidoRetro = juego.getManager().get("btnsPausa/btnSonidoRetro.png");
             TextureRegionDrawable trdBtnSonidoRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSonidoRetro));
             ImageButton btnSonido = new ImageButton(trdBtnSonido, trdBtnSonidoRetro);
             btnSonido.setPosition(ANCHO*0.8f,ALTO*0.188f, Align.center);
@@ -580,19 +586,23 @@ public class PantallaJugar extends Pantalla {
 
             // Botón(es)
             //btnAcercaDe
-            Texture texturaBtnSalir = new Texture("btnsGameOver/btnSalir.png");
+            //Texture texturaBtnSalir = new Texture("btnsGameOver/btnSalir.png");
+            Texture texturaBtnSalir = juego.getManager().get("btnsGameOver/btnSalir.png");
             TextureRegionDrawable trdBtnSalir = new TextureRegionDrawable(new TextureRegion(texturaBtnSalir));
             //Retroalimentación
-            Texture texturaBtnSalirRetro = new Texture("btnsGameOver/btnSalirRetro.png");
+            //Texture texturaBtnSalirRetro = new Texture("btnsGameOver/btnSalirRetro.png");
+            Texture texturaBtnSalirRetro = juego.getManager().get("btnsGameOver/btnSalirRetro.png");
             TextureRegionDrawable trdBtnSalirRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSalirRetro));
             ImageButton btnSalir = new ImageButton(trdBtnSalir,trdBtnSalirRetro);
             btnSalir.setPosition(ANCHO/2,ALTO/2-87, Align.center);
 
             //btnReiniciar
-            Texture texturaBtnReiniciar = new Texture("btnsGameOver/btnReiniciar.png");
+            //Texture texturaBtnReiniciar = new Texture("btnsGameOver/btnReiniciar.png");
+            Texture texturaBtnReiniciar = juego.getManager().get("btnsGameOver/btnReiniciar.png");
             TextureRegionDrawable trdBtnReiniciar= new TextureRegionDrawable(new TextureRegion(texturaBtnReiniciar));
             //Retroalimentación
-            Texture texturaBtnReiniciarRetro = new Texture("btnsGameOver/btnReinciarRetro.png");
+            //Texture texturaBtnReiniciarRetro = new Texture("btnsGameOver/btnReinciarRetro.png");
+            Texture texturaBtnReiniciarRetro = juego.getManager().get("btnsGameOver/btnReiniciarRetro.png");
             TextureRegionDrawable trdBtnReiniciarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnReiniciarRetro));
             ImageButton btnReiniciar = new ImageButton(trdBtnReiniciar,trdBtnReiniciarRetro);
             btnReiniciar.setPosition(ANCHO/2,ALTO/2, Align.center);
