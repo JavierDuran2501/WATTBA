@@ -3,6 +3,7 @@ package mx.itesm.equipo4.wattba;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -33,6 +34,8 @@ public class PantallaJugar extends Pantalla {
 
     // Estado del juego
     private EstadoJuego estado = EstadoJuego.JUGANDO;
+
+    private Stage escenaJuego;
 
     // Pausa
     private EscenaPausa escenaPausa;
@@ -95,9 +98,44 @@ public class PantallaJugar extends Pantalla {
         crearEscenaPausa();
         crearEscenaGameOver();
         crearAudio();
+        //crearEscenaJuego();
+        Texture btnPausa = new Texture("btnsPausa/btnReanudar.png");
 
         Gdx.input.setInputProcessor(new ProcesadorEntrada());
     }
+
+    /*private void crearEscenaJuego() {
+        escenaJuego = new Stage(vista);
+        //btnPausa
+        Texture texturaBtnSalir = juego.getManager().get("btnsPausa/btnSalir.png");
+        TextureRegionDrawable trdBtnSalir = new TextureRegionDrawable(new TextureRegion(texturaBtnSalir));
+        //Retroalimentación
+        //Texture texturaBtnSalirRetro = new Texture("btnsPausa/btnSalirRetro.png");
+        Texture texturaBtnSalirRetro = juego.getManager().get("btnsPausa/btnSalirRetro.png");
+        TextureRegionDrawable trdBtnJugarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSalirRetro));
+        ImageButton btnSalir = new ImageButton(trdBtnSalir,trdBtnJugarRetro);
+        btnSalir.setPosition(ANCHO/2,ALTO/2-87, Align.center);
+
+        btnSalir.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                //juego.setScreen(new PantallaMenu(juego));
+                //juego.setScreen((Screen) escenaPausa);
+                if (estado == EstadoJuego.JUGANDO){
+                    estado = EstadoJuego.PAUSADO;
+                    Gdx.input.setInputProcessor(escenaPausa);
+                    Gdx.app.log("PAUSA", "Cambia a pausado....");
+                }
+
+            }
+        });
+
+        escenaJuego.addActor(btnSalir);
+    }
+
+     */
+
 
     private void crearAudio() {
         /*AssetManager manager = new AssetManager();
@@ -230,6 +268,8 @@ public class PantallaJugar extends Pantalla {
                     ALTO*0.70f);
             batch.end();
         }
+
+        //escenaJuego.draw();
     }
 
     private void dibujarEnemigos() {
@@ -433,7 +473,12 @@ public class PantallaJugar extends Pantalla {
                 }
 
             }
+
+
             return true;
+
+
+
         }
 
         @Override

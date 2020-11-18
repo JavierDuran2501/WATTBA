@@ -142,7 +142,6 @@ public class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 // Cambiamos de pantalla
-                //juego.getManager().get(mu);
 
                 juego.setScreen( new PantallaCargando(juego,Pantallas.JUEGO));
             }

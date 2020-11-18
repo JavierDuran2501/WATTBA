@@ -93,8 +93,10 @@ public class PantallaCargando extends Pantalla
         manager.load("btnsPausa/btnSalirRetro.png",Texture.class);
         manager.load("btnsPausa/btnSonido.png",Texture.class);
         manager.load("btnsPausa/btnSonidoRetro.png",Texture.class);
-        manager.load("btnsPausa/btnReiniciar.png",Texture.class);
-        manager.load("btnsPausa/btnReiniciarRetro.png",Texture.class);
+        manager.load("btnsGameOver/btnReiniciar.png",Texture.class);
+        manager.load("btnsGameOver/btnReiniciarRetro.png",Texture.class);
+        manager.load("btnsGameOver/btnSalir.png",Texture.class);
+        manager.load("btnsGameOver/btnSalirRetro.png",Texture.class);
         manager.finishLoading();
 
         musicaJuego = manager.get("Musica/musicaMezo.mp3");
