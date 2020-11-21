@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -31,6 +32,13 @@ public class PantallaJugar extends Pantalla {
     private Texture texturaFondo;
     private float xFondo = 0;
 
+    // Texturas de epoca
+    private Texture texturaMezesoica;
+    private Texture texturaEdadAntigua;
+    private Texture texturaPrehistoria;
+
+    //Botón de pausa
+    private Texture texturaBtnPausa;
 
     // Estado del juego
     private EstadoJuego estado = EstadoJuego.JUGANDO;
@@ -89,7 +97,8 @@ public class PantallaJugar extends Pantalla {
 
     @Override
     public void show() {
-        this.texturaFondo = new Texture("Pantallas/Juego.jpg");
+        crearBtnPausa();
+        crearFondos();
         crearVaquero();
         crearTexto();
         crearArrEnemigos();
@@ -98,10 +107,22 @@ public class PantallaJugar extends Pantalla {
         crearEscenaPausa();
         crearEscenaGameOver();
         crearAudio();
+        controlMusica();
         //crearEscenaJuego();
         Texture btnPausa = new Texture("btnsPausa/btnReanudar.png");
 
         Gdx.input.setInputProcessor(new ProcesadorEntrada());
+    }
+
+    private void crearBtnPausa() {
+        texturaBtnPausa = new Texture("btnsPausa/btnSonido.png");
+    }
+
+    private void crearFondos() {
+        this.texturaMezesoica = juego.getManager().get("Pantallas/Juego.jpg");
+        texturaEdadAntigua = juego.getManager().get("Pantallas/edadAntiguaFondo.jpg");
+        texturaPrehistoria = juego.getManager().get("Pantallas/Prehistoria.jpg");
+        texturaFondo = texturaMezesoica;
     }
 
     /*private void crearEscenaJuego() {
@@ -136,27 +157,19 @@ public class PantallaJugar extends Pantalla {
 
      */
 
-
     private void crearAudio() {
-        /*AssetManager manager = new AssetManager();
-        manager.load("Musica/musicaMezo.mp3", Music.class);
-        manager.finishLoading();
-        musicaFondo = manager.get("Musica/musicaMezo.mp3");
-        musicaFondo.setVolume(0.1f);
-        musicaFondo.setLooping(true);
-        controlMusica();
-         */
-        juego.getManager().load("Musica/musicaMezo.mp3",Music.class);
+        musicaJuego = juego.getManager().get("Musica/musicaMezo.mp3");
+        musicaJuego.setVolume(0.1f);
+        musicaJuego.setLooping(true);
     }
 
     private void controlMusica() {
-        /*Preferences pref = Gdx.app.getPreferences("sonido");
-        if (pref.getBoolean("sonido"))
-            musicaFondo.play();
+        Preferences pref = Gdx.app.getPreferences("sonido");
+        if (pref.getBoolean("PLAY"))
+            musicaJuego.play();
         else
-            musicaFondo.stop();
+           musicaJuego.stop();
 
-         */
     }
 
     private void crearEscenaGameOver() {
@@ -176,17 +189,13 @@ public class PantallaJugar extends Pantalla {
 
     private void crearTexturas() {
         // Dinosaurios
-        //texturaDino_0 = new Texture("Dinosaurios/Dino001.png");
-        texturaDino_0 = juego.getManager().get("Dinosaurios/Dino001.png");
-        //texturaDino_1 = new Texture("Dinosaurios/Dino001.png");
-        //texturaDino_2 = new Texture("Dinosaurios/Dino001.png");
-        //texturaDino_3 = new Texture("Dinosaurios/Dino001.png");
-        texturaDino_1 = juego.getManager().get("Dinosaurios/Dino001.png");
-        texturaDino_2 = juego.getManager().get("Dinosaurios/Dino001.png");
+        texturaDino_0 = juego.getManager().get("Dinosaurios/Dino000.png");
+        texturaDino_1 = juego.getManager().get("Dinosaurios/Dino000.png");
+        texturaDino_2 = new Texture("EdadAntigua/Minotauro.png");
+        //texturaDino_2 = juego.getManager().get("Dinosaurios/Dino000.png");
         texturaDino_3 = juego.getManager().get("Dinosaurios/Dino001.png");
 
         //Items
-        //texturaItem = new Texture("Items/ItemRojo.png");
         texturaItem = juego.getManager().get("Items/ItemRojo.png");
 
 
@@ -204,9 +213,9 @@ public class PantallaJugar extends Pantalla {
 
     private void crearVaquero() {
       //Texture texturaVaquero = new Texture("Vaquero/Correr2.png");
-      Texture texturaMuriendo = new Texture("Vaquero/Dead__000.png");
+      //Texture texturaMuriendo = new Texture("Vaquero/Dead__000.png");
       Texture texturaVaquero = juego.getManager().get("Vaquero/Correr2.png");
-      //Texture texturaMuriendo = juego.getManager().get("Vaquero/Dead")
+      Texture texturaMuriendo = juego.getManager().get("Vaquero/Dead.png");
       vaquero = new Vaquero(texturaVaquero, texturaMuriendo, 0, 0, 200, 244);
     }
 
@@ -216,14 +225,10 @@ public class PantallaJugar extends Pantalla {
         if (estado == EstadoJuego.JUGANDO){
             actualizar();
             verificarChoques();
-            controlMusica();
         }else{
-            //musicaJuego.stop();
         }
+        cambioEpoca();
 
-
-
-        //actualizarVaquero(delta);
         borrarPantalla();
         batch.setProjectionMatrix(camara.combined);
 
@@ -233,19 +238,19 @@ public class PantallaJugar extends Pantalla {
         batch.draw(texturaFondo, xFondo,0);
         batch.draw(texturaFondo, xFondo + texturaFondo.getWidth(), 0);
 
+        //Botón pausa
+        batch.draw(texturaBtnPausa, texturaBtnPausa.getWidth(), ALTO*0.75f);
+
         //Dibujar Enemigos
         dibujarEnemigos();
 
-
-
         //Vaquero
-        vaquero.render(batch);
+        dibujarVaquero();
 
         // Texto
         dibujarTexto();
 
         //Obstaculos
-        //obstaculo_0.render(batch);
 
         batch.end();
 
@@ -272,9 +277,29 @@ public class PantallaJugar extends Pantalla {
         //escenaJuego.draw();
     }
 
+    private void dibujarVaquero() {
+        if(estado==EstadoJuego.JUGANDO){
+            vaquero.render(batch);
+        }
+        else{
+            vaquero.renderSinAnimacion(batch);
+        }
+    }
+
+    private void cambioEpoca() {
+
+        if(puntos >= 100 && puntos < 200){  //Prehistoria
+            epoca = Epocas.PREHISTORIA;
+            texturaFondo = texturaPrehistoria;
+        }else if(puntos >= 200 && puntos < 300){
+            epoca = Epocas.EDAD_ANTIGUA;
+            texturaFondo = texturaEdadAntigua;
+        }
+    }
+
     private void dibujarEnemigos() {
         for (Obstaculo obstaculo: arrObstaculos) {
-            if (obstaculo.getTipo() == 0)
+            if (obstaculo.getTipo() == 0 && estado == EstadoJuego.JUGANDO)
                 obstaculo.render(batch);
             else
                 obstaculo.renderSinAnimacion(batch);
@@ -330,8 +355,8 @@ public class PantallaJugar extends Pantalla {
                             break;
                         case 2:
                             texturaGeneral = texturaDino_2;
-                            w = 286;
-                            h = 300;
+                            w = 240;
+                            h = 208;
                             break;
                         default:
                             //alturaObstaculo = 30;
@@ -340,16 +365,74 @@ public class PantallaJugar extends Pantalla {
                                 Gdx.app.log("ITEM", ""+ texturaRandom);
                             }else{
                                 texturaGeneral = texturaDino_3;
-                                w = 286;
-                                h = 300;
+                                w = 370;
+                                h = 220;
                                 break;
                             }
 
                     }
                     break;
                 case PREHISTORIA:
+                    switch(texturaRandom){
+                        case 0:
+                            texturaGeneral = texturaDino_0;
+                            w = 286;
+                            h = 300;
+                            break;
+                        case 1:
+                            texturaGeneral = texturaDino_1;
+                            w = 286;
+                            h = 300;
+                            break;
+                        case 2:
+                            texturaGeneral = texturaDino_2;
+                            w = 240;
+                            h = 208;
+                            break;
+                        default:
+                            //alturaObstaculo = 30;
+                            if (MathUtils.random(0,2) == 0){
+                                texturaRandom = 10;
+                                Gdx.app.log("ITEM", ""+ texturaRandom);
+                            }else{
+                                texturaGeneral = texturaDino_3;
+                                w = 370;
+                                h = 220;
+                                break;
+                            }
+
+                    }
                     break;
                 case EDAD_ANTIGUA:
+                    switch(texturaRandom){
+                        case 0:
+                            texturaGeneral = texturaDino_0;
+                            w = 286;
+                            h = 300;
+                            break;
+                        case 1:
+                            texturaGeneral = texturaDino_1;
+                            w = 286;
+                            h = 300;
+                            break;
+                        case 2:
+                            texturaGeneral = texturaDino_2;
+                            w = 240;
+                            h = 208;
+                            break;
+                        default:
+                            //alturaObstaculo = 30;
+                            if (MathUtils.random(0,2) == 0){
+                                texturaRandom = 10;
+                                Gdx.app.log("ITEM", ""+ texturaRandom);
+                            }else{
+                                texturaGeneral = texturaDino_3;
+                                w = 370;
+                                h = 220;
+                                break;
+                            }
+
+                    }
                     break;
                 case EDAD_MEDIA:
                     break;
@@ -382,7 +465,9 @@ public class PantallaJugar extends Pantalla {
     private void verificarChoques() {
         for (int i = arrObstaculos.size-1; i >= 0 ; i--) {
             Obstaculo obstaculo = arrObstaculos.get(i);
-            if (vaquero.sprite.getBoundingRectangle().overlaps(obstaculo.sprite.getBoundingRectangle())){
+            Rectangle rectVaquero = new Rectangle(vaquero.sprite.getX(), vaquero.sprite.getY(), vaquero.sprite.getWidth()-50, vaquero.sprite.getHeight());
+            Rectangle rectObstaculo = new Rectangle(obstaculo.sprite.getX(), obstaculo.sprite.getY(), obstaculo.sprite.getWidth()-50, obstaculo.sprite.getHeight());
+            if (rectVaquero.overlaps(rectObstaculo)){
                 // CHOCO, hay que revisar si es obstaculo o item
                 if(obstaculo.getTipo() == 1)   // ITEM!
                 {
@@ -450,11 +535,12 @@ public class PantallaJugar extends Pantalla {
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             Vector3 v = new Vector3(screenX, screenY, 0);
             camara.unproject(v);
-
-            //Mover al vaquero
-            if(v.x<= ANCHO/2){
-                // Izq
-                // Poner Pausa
+            float xBoton = texturaBtnPausa.getWidth();
+            float yBoton = ALTO*0.75f;
+            float anchBoton = texturaBtnPausa.getWidth();
+            float altoBoton = texturaBtnPausa.getHeight();
+            Rectangle rectBoton = new Rectangle(xBoton, yBoton, anchBoton, altoBoton);
+            if (rectBoton.contains(v.x, v.y)){  //Pico botón de Pausa
                 if (estado == EstadoJuego.JUGANDO){
                     estado = EstadoJuego.PAUSADO;
                     // Cambiar el InputProcessor
@@ -464,6 +550,12 @@ public class PantallaJugar extends Pantalla {
                     estado = EstadoJuego.JUGANDO;
                     Gdx.app.log("PAUSA", "Cambia a jugando....");
                 }
+            }
+            //Mover al vaquero
+            else if(v.x<= ANCHO/2){
+                // Izq
+                // Poner Pausa
+                Gdx.app.log("CLICK IZQUIERDO", "Se clickeo el lado izquierdo");
             }else{
                 // derecha
                 // vaquero.moverDerecha(); //
@@ -574,6 +666,7 @@ public class PantallaJugar extends Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
+                    musicaJuego.stop();
                     juego.setScreen(new PantallaMenu(juego));
                 }
             });
@@ -596,12 +689,14 @@ public class PantallaJugar extends Pantalla {
 
         private void guardarPreferenciaSonido() {
             Preferences prefs = Gdx.app.getPreferences("sonido");
-            if (prefs.getBoolean("sonido"))
+            if (prefs.getBoolean("PLAY"))
             {
-                prefs.putBoolean("sonido", false);
+                prefs.putBoolean("PLAY", false);
+                musicaJuego.stop();
 
             }else {
-                prefs.putBoolean("sonido", true);
+                prefs.putBoolean("PLAY", true);
+                musicaJuego.play();
             }
 
         }
@@ -659,6 +754,7 @@ public class PantallaJugar extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     // QUITAR Pausa
+                    musicaJuego.stop();
                     juego.setScreen(new PantallaMenu(juego));
                 }
             });

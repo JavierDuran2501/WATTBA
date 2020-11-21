@@ -75,18 +75,19 @@ public class PantallaCargando extends Pantalla
         manager.load("btnsPausa/btnSonidoRetro.png", Texture.class);
         manager.load("Musica/musicaMenu.mp3", Music.class);
         manager.finishLoading();
-        musicaMenu = manager.get("Musica/musicaMenu.mp3");
-        musicaMenu.setVolume(0.1f);
-        musicaMenu.play();
-        musicaMenu.setLooping(true);
+
     }
 
     private void cargarRecursosRunner() {
         manager.load("Pantallas/Juego.jpg",Texture.class);
+        manager.load("Pantallas/edadAntiguaFondo.jpg", Texture.class);
+        manager.load("Pantallas/Prehistoria.jpg", Texture.class);
         manager.load("Musica/musicaMezo.mp3", Music.class);
+        manager.load("Dinosaurios/Dino000.png",Texture.class);
         manager.load("Dinosaurios/Dino001.png",Texture.class);
         manager.load("Items/ItemRojo.png",Texture.class);
         manager.load("Vaquero/Correr2.png",Texture.class);
+        manager.load("Vaquero/Dead.png",Texture.class);
         manager.load("btnsPausa/btnReanudar.png",Texture.class);
         manager.load("btnsPausa/btnReanudarRetro.png",Texture.class);
         manager.load("btnsPausa/btnSalir.png",Texture.class);
@@ -98,11 +99,6 @@ public class PantallaCargando extends Pantalla
         manager.load("btnsGameOver/btnSalir.png",Texture.class);
         manager.load("btnsGameOver/btnSalirRetro.png",Texture.class);
         manager.finishLoading();
-
-        musicaJuego = manager.get("Musica/musicaMezo.mp3");
-        musicaJuego.setVolume(0.1f);
-        musicaJuego.play();
-        musicaJuego.setLooping(true);
     }
 
     @Override
@@ -138,8 +134,6 @@ public class PantallaCargando extends Pantalla
                 // Agregar las otras pantallas
                 case JUEGO:
                     juego.setScreen(new PantallaJugar(juego));
-                    Music musica = juego.getManager().get("Musica/musicaMenu.mp3");
-                    musica.stop();
             }
         }
 

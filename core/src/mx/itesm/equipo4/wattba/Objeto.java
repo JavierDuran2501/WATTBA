@@ -54,6 +54,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
     }
 
     public void renderSinAnimacion(SpriteBatch batch){
+
         sprite.draw(batch);
     }
 

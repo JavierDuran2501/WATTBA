@@ -2,8 +2,6 @@ package mx.itesm.equipo4.wattba;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -35,7 +33,7 @@ public class PantallaMenu extends Pantalla {
     private float puntos;
 
     // Musica
-    //private Music musicaFondo;
+    private Music musicaFondo;
 
 
     public PantallaMenu(Juego juego) {
@@ -45,33 +43,25 @@ public class PantallaMenu extends Pantalla {
     //Entra en ejecución cuando la pantalla se va a mostrar; inicializa objetos
     @Override
     public void show() {
-        texturaFondo = new Texture("Pantallas/pantallaTituloWATTBA.png");
-        cargarPreferencias();
+        texturaFondo = juego.getManager().get("Pantallas/pantallaTituloWATTBA.png");
+        cargarPuntos();
         crearMenu();
         crearTexto();
         crearAudio();
+        controlMusica();
     }
 
-
-
     private void crearAudio() {
-        /*AssetManager manager = new AssetManager();
-        manager.load("Musica/musicaMenu.mp3", Music.class);
-        manager.finishLoading();
-        musicaFondo = manager.get("Musica/musicaMenu.mp3");
+        musicaFondo= juego.getManager().get("Musica/musicaMenu.mp3");
         musicaFondo.setVolume(0.1f);
         musicaFondo.setLooping(true);
-
-
-         */
-        juego.getManager().load("Musica/musicaMenu.mp3",Music.class);
     }
 
     private void crearTexto() {
         texto = new Texto("Fuentes/game.fnt");
     }
 
-    private void cargarPreferencias() {
+    private void cargarPuntos() {
         Preferences prefs = Gdx.app.getPreferences("marcador");
         puntos = prefs.getFloat("PUNTOS", 0);
     }
@@ -142,7 +132,7 @@ public class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 // Cambiamos de pantalla
-
+                musicaFondo.stop();
                 juego.setScreen( new PantallaCargando(juego,Pantallas.JUEGO));
             }
         });
@@ -153,7 +143,6 @@ public class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 guardarPreferenciaSonido();
-
 
             }
         });
@@ -168,20 +157,22 @@ public class PantallaMenu extends Pantalla {
 
     private void guardarPreferenciaSonido() {
         Preferences prefs = Gdx.app.getPreferences("sonido");
-        if (prefs.getBoolean("sonido"))
+        if (prefs.getBoolean("PLAY")){
+            prefs.putBoolean("PLAY", false);
+            musicaFondo.stop();
+        }
 
-            prefs.putBoolean("sonido", false);
-
-        else
-            prefs.putBoolean("sonido", true);
-
-
+        else{
+            prefs.putBoolean("PLAY", true);
+            musicaFondo.play();
+        }
+        prefs.flush();
     }
 
     @Override
     public void render(float delta) {
         borrarPantalla();
-        //controlMusica();
+        controlMusica();
         batch.setProjectionMatrix(camara.combined);
 
         batch.begin();
@@ -194,13 +185,14 @@ public class PantallaMenu extends Pantalla {
     }
 
     private void controlMusica() {
-        /*Preferences pref = Gdx.app.getPreferences("sonido");
-        if (pref.getBoolean("sonido"))
+        Preferences pref = Gdx.app.getPreferences("sonido");
+        if (pref.getBoolean("PLAY")){
             musicaFondo.play();
-        else
-            musicaFondo.stop();
+        }
 
-         */
+        else{
+            musicaFondo.stop();
+        }
     }
 
     private void dibujarTexto() {
