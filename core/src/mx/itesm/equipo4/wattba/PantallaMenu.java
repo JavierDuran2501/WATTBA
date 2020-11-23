@@ -164,7 +164,7 @@ public class PantallaMenu extends Pantalla {
     }
 
     /*
-    //  Leer las preferencias
+    // Leer las preferencias
     Preferences prefs = Gdx.app.getPreferences("sonido");
     boolean musicaFondo = prefs.getBoolean("PLAY");
     if (musicaFondo==true){
