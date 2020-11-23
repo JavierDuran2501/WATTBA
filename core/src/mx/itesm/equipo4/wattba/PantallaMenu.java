@@ -197,7 +197,7 @@ public class PantallaMenu extends Pantalla {
 
     private void dibujarTexto() {
         int puntosInt = (int)puntos;
-        texto.mostrarMensaje(batch, "HighScore: " + puntosInt, ANCHO*0.2f, 0.1f*ALTO);
+        texto.mostrarMensaje(batch, "HighScore: " + puntosInt, ANCHO*0.22f, 0.1f*ALTO);
     }
 
     @Override

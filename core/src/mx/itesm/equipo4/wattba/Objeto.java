@@ -40,10 +40,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
         sprite.setPosition(x, y);
     }
 
-    public Objeto() {
-
-    }
-
     public void render(SpriteBatch batch) {
         float delta = Gdx.graphics.getDeltaTime();  // 1/60
         timerAnimacion += delta;

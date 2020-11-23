@@ -86,6 +86,10 @@ public class PantallaCargando extends Pantalla
         manager.load("Dinosaurios/Dino000.png",Texture.class);
         manager.load("Dinosaurios/Dino001.png",Texture.class);
         manager.load("Items/ItemRojo.png",Texture.class);
+        manager.load("Items/ItemAzul.png",Texture.class);
+        manager.load("Items/ItemDorado.png",Texture.class);
+        manager.load("Items/ItemMalo0.png",Texture.class);
+        manager.load("Items/ItemMalo1.png",Texture.class);
         manager.load("Vaquero/Correr2.png",Texture.class);
         manager.load("Vaquero/Dead.png",Texture.class);
         manager.load("btnsPausa/btnReanudar.png",Texture.class);

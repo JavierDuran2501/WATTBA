@@ -3,8 +3,6 @@ package mx.itesm.equipo4.wattba;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -60,6 +58,9 @@ public class PantallaJugar extends Pantalla {
     private float timerAnimaVaquero;
     private final float TIEMPO_FRAME_VAQUERO = 1;
 
+    //Poderes
+    private boolean vidaExtra = false;
+
     // Texto
     private Texto texto;        // Dibuja textos en la pantalla
     private float puntos = 0;
@@ -72,17 +73,23 @@ public class PantallaJugar extends Pantalla {
     private Texture texturaGeneral;
 
     //Items
-    private Texture texturaItem;
+    private Texture texturaItemRojo;
+    private Texture texturaItemAzul;
+    private Texture texturaItemDorado;
+    private Texture texturaItemMalo0;
+    private Texture texturaItemMalo1;
+
+    // Puntos Extra
+    private int puntosExtra = 0;
 
     // Textura Dinosaurios
     private Texture texturaDino_0;
-    //Texture texturaDino_0 = juego.getManager().get("Dinosaurios/Dino001.png");
     private Texture texturaDino_1;
-    //private Texture texturaDino_1 = juego.getManager().get("Dinosaurios/Dino001.png");
     private Texture texturaDino_2;
-    //private Texture texturaDino_2 = juego.getManager().get("Dinosaurios/Dino001.png");
     private Texture texturaDino_3;
-    //private Texture texturaDino_3 = juego.getManager().get("Dinosaurios/Dino001.png");
+
+    // Velocidad Enemigos
+    private int velocidadObstaculos = 10;
 
     // Arreglo Enemigos
     private Array<Obstaculo> arrObstaculos;
@@ -92,6 +99,7 @@ public class PantallaJugar extends Pantalla {
 
     //Música
     private Music musicaJuego;
+
 
     public PantallaJugar(Juego juego) { this.juego = juego;}
 
@@ -108,14 +116,12 @@ public class PantallaJugar extends Pantalla {
         crearEscenaGameOver();
         crearAudio();
         controlMusica();
-        //crearEscenaJuego();
-        Texture btnPausa = new Texture("btnsPausa/btnReanudar.png");
 
         Gdx.input.setInputProcessor(new ProcesadorEntrada());
     }
 
     private void crearBtnPausa() {
-        texturaBtnPausa = new Texture("btnsPausa/btnSonido.png");
+        texturaBtnPausa = new Texture("btnsPausa/btnPausa.png");
     }
 
     private void crearFondos() {
@@ -124,38 +130,6 @@ public class PantallaJugar extends Pantalla {
         texturaPrehistoria = juego.getManager().get("Pantallas/Prehistoria.jpg");
         texturaFondo = texturaMezesoica;
     }
-
-    /*private void crearEscenaJuego() {
-        escenaJuego = new Stage(vista);
-        //btnPausa
-        Texture texturaBtnSalir = juego.getManager().get("btnsPausa/btnSalir.png");
-        TextureRegionDrawable trdBtnSalir = new TextureRegionDrawable(new TextureRegion(texturaBtnSalir));
-        //Retroalimentación
-        //Texture texturaBtnSalirRetro = new Texture("btnsPausa/btnSalirRetro.png");
-        Texture texturaBtnSalirRetro = juego.getManager().get("btnsPausa/btnSalirRetro.png");
-        TextureRegionDrawable trdBtnJugarRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSalirRetro));
-        ImageButton btnSalir = new ImageButton(trdBtnSalir,trdBtnJugarRetro);
-        btnSalir.setPosition(ANCHO/2,ALTO/2-87, Align.center);
-
-        btnSalir.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                //juego.setScreen(new PantallaMenu(juego));
-                //juego.setScreen((Screen) escenaPausa);
-                if (estado == EstadoJuego.JUGANDO){
-                    estado = EstadoJuego.PAUSADO;
-                    Gdx.input.setInputProcessor(escenaPausa);
-                    Gdx.app.log("PAUSA", "Cambia a pausado....");
-                }
-
-            }
-        });
-
-        escenaJuego.addActor(btnSalir);
-    }
-
-     */
 
     private void crearAudio() {
         musicaJuego = juego.getManager().get("Musica/musicaMezo.mp3");
@@ -192,11 +166,15 @@ public class PantallaJugar extends Pantalla {
         texturaDino_0 = juego.getManager().get("Dinosaurios/Dino000.png");
         texturaDino_1 = juego.getManager().get("Dinosaurios/Dino000.png");
         texturaDino_2 = new Texture("EdadAntigua/Minotauro.png");
-        //texturaDino_2 = juego.getManager().get("Dinosaurios/Dino000.png");
         texturaDino_3 = juego.getManager().get("Dinosaurios/Dino001.png");
 
         //Items
-        texturaItem = juego.getManager().get("Items/ItemRojo.png");
+        texturaItemRojo = juego.getManager().get("Items/ItemRojo.png");
+        texturaItemAzul = juego.getManager().get("Items/ItemAzul.png");
+        texturaItemDorado = juego.getManager().get("Items/ItemDorado.png");
+        texturaItemMalo0 = juego.getManager().get("Items/ItemMalo0.png");
+        texturaItemMalo1 = juego.getManager().get("Items/ItemMalo1.png");
+
 
 
     }
@@ -239,7 +217,7 @@ public class PantallaJugar extends Pantalla {
         batch.draw(texturaFondo, xFondo + texturaFondo.getWidth(), 0);
 
         //Botón pausa
-        batch.draw(texturaBtnPausa, texturaBtnPausa.getWidth(), ALTO*0.75f);
+        batch.draw(texturaBtnPausa, texturaBtnPausa.getWidth(), ALTO*0.85f);
 
         //Dibujar Enemigos
         dibujarEnemigos();
@@ -288,12 +266,16 @@ public class PantallaJugar extends Pantalla {
 
     private void cambioEpoca() {
 
-        if(puntos >= 100 && puntos < 200){  //Prehistoria
+        if(puntos >= 50 && puntos < 60){  //Prehistoria
             epoca = Epocas.PREHISTORIA;
             texturaFondo = texturaPrehistoria;
-        }else if(puntos >= 200 && puntos < 300){
+            velocidadObstaculos += 0.01;
+            puntosExtra += 0.2;
+        }else if(puntos >= 60 && puntos < 300){
             epoca = Epocas.EDAD_ANTIGUA;
             texturaFondo = texturaEdadAntigua;
+            velocidadObstaculos += 0.01;
+            puntosExtra += 0.21;
         }
     }
 
@@ -304,13 +286,16 @@ public class PantallaJugar extends Pantalla {
             else
                 obstaculo.renderSinAnimacion(batch);
             if (estado == EstadoJuego.JUGANDO)
-                obstaculo.moverIzquierda();
+                obstaculo.moverIzquierda(velocidadObstaculos);
         }
     }
 
     private void dibujarTexto() {
         int puntosInt = (int)puntos;
         texto.mostrarMensaje(batch, "" + puntosInt, ANCHO*0.9f, 0.9f*ALTO);
+        if(vidaExtra){
+            texto.mostrarMensaje(batch, "Tienes vida extra", ANCHO/2,ALTO*0.9f);
+        }
     }
 
     private void actualizar() {
@@ -324,7 +309,8 @@ public class PantallaJugar extends Pantalla {
         actualizarObstaculos();
 
         //Actulizar puntos
-        puntos += Gdx.graphics.getDeltaTime();
+        puntos += (Gdx.graphics.getDeltaTime());
+        puntos += puntosExtra;
 
     }
 
@@ -360,8 +346,20 @@ public class PantallaJugar extends Pantalla {
                             break;
                         default:
                             //alturaObstaculo = 30;
+                            //MathUtils.random(0,2)
                             if (MathUtils.random(0,2) == 0){
-                                texturaRandom = 10;
+                                int item = MathUtils.random(0,4);
+                                if (item == 0){
+                                    texturaRandom = 10;
+                                }else if (item == 1 && vidaExtra == false){
+                                    texturaRandom = 11;
+                                }else if (item == 2){
+                                    texturaRandom = 12;
+                                }else if(item == 3){
+                                    texturaRandom = 13;
+                                }else{
+                                    texturaRandom = 14;
+                                }
                                 Gdx.app.log("ITEM", ""+ texturaRandom);
                             }else{
                                 texturaGeneral = texturaDino_3;
@@ -446,8 +444,22 @@ public class PantallaJugar extends Pantalla {
 
             Obstaculo obstaculo;
             if (texturaRandom == 10){
-                obstaculo = new Obstaculo(texturaItem, ANCHO + 50, alturaObstaculo, 1);
-            }else{
+                alturaObstaculo = MathUtils.random(0, 500);
+                obstaculo = new Obstaculo(texturaItemRojo, ANCHO + 50, alturaObstaculo, 1);
+            }else if(texturaRandom == 11){
+                alturaObstaculo = MathUtils.random(0, 500);
+                obstaculo = new Obstaculo(texturaItemDorado, ANCHO + 50, alturaObstaculo, 2);
+            }else if(texturaRandom == 12){
+                alturaObstaculo = MathUtils.random(0, 500);
+                obstaculo = new Obstaculo(texturaItemAzul, ANCHO + 50, alturaObstaculo, 3);
+            }else if(texturaRandom == 13){
+                alturaObstaculo = MathUtils.random(0, 500);
+                obstaculo = new Obstaculo(texturaItemMalo0, ANCHO + 50, alturaObstaculo, 4);
+            }else if(texturaRandom == 14){
+                alturaObstaculo = MathUtils.random(0, 500);
+                obstaculo = new Obstaculo(texturaItemMalo1, ANCHO + 50, alturaObstaculo, 5);
+            }
+            else{
                 obstaculo = new Obstaculo(texturaGeneral, ANCHO + 50, alturaObstaculo, w, h, 0);
             }
             arrObstaculos.add(obstaculo);
@@ -469,11 +481,26 @@ public class PantallaJugar extends Pantalla {
             Rectangle rectObstaculo = new Rectangle(obstaculo.sprite.getX(), obstaculo.sprite.getY(), obstaculo.sprite.getWidth()-50, obstaculo.sprite.getHeight());
             if (rectVaquero.overlaps(rectObstaculo)){
                 // CHOCO, hay que revisar si es obstaculo o item
-                if(obstaculo.getTipo() == 1)   // ITEM!
+                if(obstaculo.getTipo() == 1)   // ITEMROJO!
                 {
                     arrObstaculos.removeIndex(i);
                     puntos += 20;
-                    Gdx.app.log("COLISION CON ITEM", "El vaquero choco con ITEM");
+                }else if(obstaculo.getTipo() == 2){ //ITEMDORADO
+                    arrObstaculos.removeIndex(i);
+                    vidaExtra = true;
+                }else if(obstaculo.getTipo() == 3){ //ITEMAZUL
+                    arrObstaculos.removeIndex(i);
+                    puntosExtra += 0.3;
+                }else if(obstaculo.getTipo() == 4){ //ITEMMALO0
+                    arrObstaculos.removeIndex(i);
+                    velocidadObstaculos += 1;
+                }else if(obstaculo.getTipo() == 5){ //ITEMMALO1
+                    arrObstaculos.removeIndex(i);
+                    puntos-= 20;
+                }
+                else if(vidaExtra){
+                    arrObstaculos.removeIndex(i);
+                    vidaExtra = false;
                 }
                 // Obstaculo
                 else{
@@ -536,7 +563,7 @@ public class PantallaJugar extends Pantalla {
             Vector3 v = new Vector3(screenX, screenY, 0);
             camara.unproject(v);
             float xBoton = texturaBtnPausa.getWidth();
-            float yBoton = ALTO*0.75f;
+            float yBoton = ALTO*0.85f;
             float anchBoton = texturaBtnPausa.getWidth();
             float altoBoton = texturaBtnPausa.getHeight();
             Rectangle rectBoton = new Rectangle(xBoton, yBoton, anchBoton, altoBoton);
@@ -554,8 +581,12 @@ public class PantallaJugar extends Pantalla {
             //Mover al vaquero
             else if(v.x<= ANCHO/2){
                 // Izq
-                // Poner Pausa
+                // Deslizar
                 Gdx.app.log("CLICK IZQUIERDO", "Se clickeo el lado izquierdo");
+                if (vaquero.getEstado() != EstadosVaquero.SALTANDO){
+                    vaquero.deslizar();
+                }
+
             }else{
                 // derecha
                 // vaquero.moverDerecha(); //

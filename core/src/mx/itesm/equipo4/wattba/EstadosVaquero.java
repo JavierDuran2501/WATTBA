@@ -4,6 +4,7 @@ public enum EstadosVaquero
 {
     CORRIENDO,
     SALTANDO,
-    MURIENDO
+    MURIENDO,
+    DESLIZANDO
 
 }

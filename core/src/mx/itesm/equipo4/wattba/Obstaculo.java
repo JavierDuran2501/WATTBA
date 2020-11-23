@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Obstaculo extends Objeto
 {
     private Texture textura;
-    private int tipo; // 0 = Obstaculo, 1 = Item.
+    private int tipo; // 0 = Obstaculo, 1 = ItemRojo, 2 = ItemDorado, 3 = ItemAzul, 4 = ItemMalo0, 5 = ItemMalo1
 
     public Obstaculo(Texture textura, float x, float y, int tipo){
         super(textura, x, y);
@@ -17,8 +17,9 @@ public class Obstaculo extends Objeto
         this.tipo = tipo;
     }
 
-    public void moverIzquierda() {
-        sprite.setX(sprite.getX()-10);
+    public void moverIzquierda(int x) {
+
+        sprite.setX(sprite.getX()-x);
     }
 
     public int getTipo() {

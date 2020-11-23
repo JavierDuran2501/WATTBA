@@ -15,11 +15,13 @@ public class Vaquero extends Objeto
     //Texturas
     // Texture texturaIdle;
     private Texture texturaMuriendo;
+    private Texture texturaDeslizando;
+    private Texture texturaCorrer;
 
     // Salto
     private float yBase;        // y del piso
     private float tAire;        // tiempo de simulación < tVuelo
-    private final float V0 = 145;
+    private final float V0 = 135;
     private final float G = 20;
     private float tVuelo;
 
@@ -31,7 +33,8 @@ public class Vaquero extends Objeto
         estado = EstadosVaquero.CORRIENDO;
         //Salto
         yBase = y;
-
+        this.texturaDeslizando = new Texture("Vaquero/Slide.png");
+        this.texturaCorrer = new Texture("Vaquero/Run.png");
     }
 
     public EstadosVaquero getEstado() {
@@ -74,10 +77,26 @@ public class Vaquero extends Objeto
                 sprite.setY(yBase);
                 estado = EstadosVaquero.CORRIENDO;
             }
-        } else {
-            // Animación de muerte
+        } else if (estado == EstadosVaquero.DESLIZANDO) {
+            tAire += 10*delta;
+            sprite.setTexture(texturaDeslizando);
+            sprite.draw(batch);
+            if (tAire>=tVuelo) {
+                sprite.setY(yBase);
+                estado = EstadosVaquero.CORRIENDO;
+                sprite.setTexture(texturaCorrer);
+            }
+        }else{
+
         }
 
-
     }
+
+    public void deslizar(){
+        estado = EstadosVaquero.DESLIZANDO;
+        tAire = 0;
+        tVuelo = 2*V0/G;
+    }
+
 }
+
