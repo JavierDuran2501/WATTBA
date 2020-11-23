@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -102,7 +103,14 @@ public class PantallaMenu extends Pantalla {
         //Retroalimentación
         Texture texturaBtnSonidoRetro = juego.getManager().get("btnsPausa/btnSonidoRetro.png");
         TextureRegionDrawable trdBtnSonidoRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSonidoRetro));
-        ImageButton btnSonido = new ImageButton(trdBtnSonido, trdBtnSonidoRetro);
+
+        // Estilos de botón
+        final Button.ButtonStyle estiloPrendido= new Button.ButtonStyle(trdBtnSonido, trdBtnSonidoRetro, null);
+        final Button.ButtonStyle estiloApagado = new Button.ButtonStyle(trdBtnSonidoRetro, trdBtnSonido, null);
+
+        final ImageButton.ImageButtonStyle Prendido = new ImageButton.ImageButtonStyle(estiloPrendido);
+        final ImageButton.ImageButtonStyle Apagado = new ImageButton.ImageButtonStyle(estiloApagado);
+        final ImageButton btnSonido = new ImageButton(trdBtnSonido, trdBtnSonidoRetro);
         btnSonido.setPosition(ANCHO*0.8f,ALTO*0.188f, Align.center);
 
         // Listeners de los botones
@@ -154,6 +162,20 @@ public class PantallaMenu extends Pantalla {
 
         Gdx.input.setInputProcessor(escenaMenu);
     }
+
+    /*
+    // Leer las preferencias
+    Preferences prefs = Gdx.app.getPreferences("sonido");
+    boolean musicaFondo = prefs.getBoolean("PLAY");
+    if (musicaFondo==true){
+        // Música prendida
+        btnSonido.setStyle(Prendido);
+    } else {
+        // Música apagada
+        btnSonido.setStyle(Apagado);
+    }
+    */
+
 
     private void guardarPreferenciaSonido() {
         Preferences prefs = Gdx.app.getPreferences("sonido");
