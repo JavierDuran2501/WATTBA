@@ -596,12 +596,7 @@ public class PantallaJugar extends Pantalla {
                 }
 
             }
-
-
             return true;
-
-
-
         }
 
         @Override
