@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -672,7 +673,14 @@ public class PantallaJugar extends Pantalla {
             //Texture texturaBtnSonidoRetro = new Texture("btnsPausa/btnSonidoRetro.png");
             Texture texturaBtnSonidoRetro = juego.getManager().get("btnsPausa/btnSonidoRetro.png");
             TextureRegionDrawable trdBtnSonidoRetro = new TextureRegionDrawable(new TextureRegion(texturaBtnSonidoRetro));
-            ImageButton btnSonido = new ImageButton(trdBtnSonido, trdBtnSonidoRetro);
+            // Estilos de botón
+            final Button.ButtonStyle estiloPrendido= new Button.ButtonStyle(trdBtnSonido, trdBtnSonidoRetro, null);
+            final Button.ButtonStyle estiloApagado = new Button.ButtonStyle(trdBtnSonidoRetro, trdBtnSonido, null);
+
+            final ImageButton.ImageButtonStyle Prendido = new ImageButton.ImageButtonStyle(estiloPrendido);
+            final ImageButton.ImageButtonStyle Apagado = new ImageButton.ImageButtonStyle(estiloApagado);
+
+            final ImageButton btnSonido = new ImageButton(trdBtnSonido, trdBtnSonidoRetro);
             btnSonido.setPosition(ANCHO*0.8f,ALTO*0.188f, Align.center);
 
 
@@ -693,7 +701,8 @@ public class PantallaJugar extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     musicaJuego.stop();
-                    juego.setScreen(new PantallaMenu(juego));
+                    //*********CAMBIADO**********
+                    juego.setScreen(new PantallaCargando(juego,Pantallas.MENU));
                 }
             });
 
@@ -702,15 +711,17 @@ public class PantallaJugar extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     guardarPreferenciaSonido();
+                    if (musicaJuego.isPlaying()){
+                        btnSonido.setStyle(Prendido);
+                    }else{
+                        btnSonido.setStyle(Apagado);
+                    }
                 }
             });
 
             this.addActor(btnReanudar);
             this.addActor(btnSalir);
             this.addActor(btnSonido);
-
-
-
         }
 
         private void guardarPreferenciaSonido() {
@@ -719,11 +730,11 @@ public class PantallaJugar extends Pantalla {
             {
                 prefs.putBoolean("PLAY", false);
                 musicaJuego.stop();
-
             }else {
                 prefs.putBoolean("PLAY", true);
                 musicaJuego.play();
             }
+
 
         }
     }

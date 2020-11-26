@@ -151,7 +151,11 @@ public class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 guardarPreferenciaSonido();
-
+                if (musicaFondo.isPlaying()){
+                    btnSonido.setStyle(Prendido);
+                }else{
+                    btnSonido.setStyle(Apagado);
+                }
             }
         });
 
@@ -163,24 +167,11 @@ public class PantallaMenu extends Pantalla {
         Gdx.input.setInputProcessor(escenaMenu);
     }
 
-    /*
-    //  Leer las preferencias
-    Preferences prefs = Gdx.app.getPreferences("sonido");
-    boolean musicaFondo = prefs.getBoolean("PLAY");
-    if (musicaFondo==true){
-        // Música prendida
-        btnSonido.setStyle(Prendido);
-    } else {
-        // Música apagada
-        btnSonido.setStyle(Apagado);
-    }
-    */
-
-
     private void guardarPreferenciaSonido() {
         Preferences prefs = Gdx.app.getPreferences("sonido");
         if (prefs.getBoolean("PLAY")){
             prefs.putBoolean("PLAY", false);
+
             musicaFondo.stop();
         }
 
