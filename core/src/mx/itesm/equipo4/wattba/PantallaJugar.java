@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -98,11 +99,15 @@ public class PantallaJugar extends Pantalla {
     private float TIEMPO_CREA_OBSTACULOS = 1;
     private float tiempoBase = 1.5f;
 
-    //Música
+    //Música y sonidos
     private Music musicaGeneral;
     private Music musicaMezo;
     private Music musicaPrehistoria;
     private Music musicaAntigua;
+    private Sound sonidoSalto;
+    private Sound sonidoItem;
+    private Sound sonidoItemMalo;
+    private Sound sonidoCambioEpoca;
 
     // AUmento puntos/velocidad enemigos
     private boolean aumento = false;
@@ -145,7 +150,7 @@ public class PantallaJugar extends Pantalla {
         musicaGeneral.setVolume(0.1f);
         musicaGeneral.setLooping(true);
 
-
+        sonidoSalto = juego.getManager().get("Sonidos/sonidoSalto.mp3");
 
         if (this.epoca == Epocas.PREHISTORIA){
             musicaGeneral = musicaPrehistoria;
@@ -703,6 +708,7 @@ public class PantallaJugar extends Pantalla {
                 if (vaquero.getEstado() != EstadosVaquero.SALTANDO && vaquero.getEstado() != EstadosVaquero.DESLIZANDO)
                 {
                     vaquero.saltar();
+                    sonidoSalto.play();
                 }
 
             }

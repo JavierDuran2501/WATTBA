@@ -2,6 +2,7 @@ package mx.itesm.equipo4.wattba;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -83,10 +84,14 @@ public class PantallaCargando extends Pantalla
         manager.load("Pantallas/edadAntiguaFondo.jpg", Texture.class);
         manager.load("Pantallas/Prehistoria.jpg", Texture.class);
 
-        //Música
+        //Música y sonido
         manager.load("Musica/musicaMezo.mp3", Music.class);
         manager.load("Musica/musicaPrehistoria.mp3",Music.class);
         manager.load("Musica/MusicaAntigua.mp3",Music.class);
+        manager.load("Sonidos/sonidoSalto.mp3", Sound.class);
+        manager.load("Sonidos/sonidoItem.mp3",Sound.class);
+        manager.load("Sonidos/sonidoItemMalo.mp3",Sound.class);
+        manager.load("Sonidos/sonidoCambioEpoca.mp3",Sound.class);
 
         //Enemigos
         manager.load("Dinosaurios/Dino000.png",Texture.class);
