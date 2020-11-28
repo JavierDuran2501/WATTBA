@@ -81,7 +81,7 @@ public class PantallaJugar extends Pantalla {
     private Texture texturaItemMalo1;
 
     // Puntos Extra
-    private int puntosExtra = 0;
+    private float puntosExtra = 0;
 
     // Textura Dinosaurios
     private Texture texturaDino_0;
@@ -100,6 +100,9 @@ public class PantallaJugar extends Pantalla {
 
     //Música
     private Music musicaJuego;
+
+    // AUmento puntos/velocidad enemigos
+    private boolean aumento = false;
 
 
     public PantallaJugar(Juego juego) { this.juego = juego;}
@@ -266,18 +269,34 @@ public class PantallaJugar extends Pantalla {
     }
 
     private void cambioEpoca() {
-
-        if(puntos >= 50 && puntos < 60){  //Prehistoria
+        if(puntos >= 20 && puntos < 150){  //Prehistoria
             epoca = Epocas.PREHISTORIA;
             texturaFondo = texturaPrehistoria;
-            velocidadObstaculos += 0.01;
-            puntosExtra += 0.2;
-        }else if(puntos >= 60 && puntos < 300){
+            if (!aumento){
+                aumentarVelocidadOBstaculo(2);
+                aumentarPuntosExtra(0.166666f);
+                vaquero.moverVaquero();
+                aumento = true;
+            }
+
+        }else if(puntos >= 150 && puntos < 300){ // Edad antigua
             epoca = Epocas.EDAD_ANTIGUA;
             texturaFondo = texturaEdadAntigua;
-            velocidadObstaculos += 0.01;
-            puntosExtra += 0.21;
+            if (aumento){
+                aumentarVelocidadOBstaculo(2);
+                aumentarPuntosExtra(0.166666f);
+                vaquero.moverVaquero();
+                aumento = false;
+            }
         }
+    }
+
+    private void aumentarVelocidadOBstaculo(int i) {
+        velocidadObstaculos += i;
+    }
+
+    private void aumentarPuntosExtra(float i) {
+        puntosExtra += i;
     }
 
     private void dibujarEnemigos() {
@@ -332,13 +351,31 @@ public class PantallaJugar extends Pantalla {
                     switch(texturaRandom){
                         case 0:
                             texturaGeneral = texturaDino_0;
+                            alturaObstaculo = 200;
                             w = 286;
                             h = 300;
                             break;
                         case 1:
-                            texturaGeneral = texturaDino_1;
-                            w = 286;
-                            h = 300;
+                            if (MathUtils.random(0,2) == 0){
+                                int item = MathUtils.random(0,4);
+                                if (item == 0){
+                                    texturaRandom = 10;
+                                }else if (item == 1 && vidaExtra == false){
+                                    texturaRandom = 11;
+                                }else if (item == 2){
+                                    texturaRandom = 12;
+                                }else if(item == 3){
+                                    texturaRandom = 13;
+                                }else{
+                                    texturaRandom = 14;
+                                }
+                                Gdx.app.log("ITEM", ""+ texturaRandom);
+                            }else{
+                                texturaGeneral = texturaDino_1;
+                                w = 286;
+                                h = 300;
+                                break;
+                            }
                             break;
                         case 2:
                             texturaGeneral = texturaDino_2;
@@ -375,13 +412,31 @@ public class PantallaJugar extends Pantalla {
                     switch(texturaRandom){
                         case 0:
                             texturaGeneral = texturaDino_0;
+                            alturaObstaculo = 200;
                             w = 286;
                             h = 300;
                             break;
                         case 1:
-                            texturaGeneral = texturaDino_1;
-                            w = 286;
-                            h = 300;
+                            if (MathUtils.random(0,2) == 0){
+                                int item = MathUtils.random(0,4);
+                                if (item == 0){
+                                    texturaRandom = 10;
+                                }else if (item == 1 && vidaExtra == false){
+                                    texturaRandom = 11;
+                                }else if (item == 2){
+                                    texturaRandom = 12;
+                                }else if(item == 3){
+                                    texturaRandom = 13;
+                                }else{
+                                    texturaRandom = 14;
+                                }
+                                Gdx.app.log("ITEM", ""+ texturaRandom);
+                            }else{
+                                texturaGeneral = texturaDino_1;
+                                w = 286;
+                                h = 300;
+                                break;
+                            }
                             break;
                         case 2:
                             texturaGeneral = texturaDino_2;
@@ -390,8 +445,20 @@ public class PantallaJugar extends Pantalla {
                             break;
                         default:
                             //alturaObstaculo = 30;
+                            //MathUtils.random(0,2)
                             if (MathUtils.random(0,2) == 0){
-                                texturaRandom = 10;
+                                int item = MathUtils.random(0,4);
+                                if (item == 0){
+                                    texturaRandom = 10;
+                                }else if (item == 1 && vidaExtra == false){
+                                    texturaRandom = 11;
+                                }else if (item == 2){
+                                    texturaRandom = 12;
+                                }else if(item == 3){
+                                    texturaRandom = 13;
+                                }else{
+                                    texturaRandom = 14;
+                                }
                                 Gdx.app.log("ITEM", ""+ texturaRandom);
                             }else{
                                 texturaGeneral = texturaDino_3;
@@ -406,13 +473,31 @@ public class PantallaJugar extends Pantalla {
                     switch(texturaRandom){
                         case 0:
                             texturaGeneral = texturaDino_0;
+                            alturaObstaculo = 200;
                             w = 286;
                             h = 300;
                             break;
                         case 1:
-                            texturaGeneral = texturaDino_1;
-                            w = 286;
-                            h = 300;
+                            if (MathUtils.random(0,2) == 0){
+                                int item = MathUtils.random(0,4);
+                                if (item == 0){
+                                    texturaRandom = 10;
+                                }else if (item == 1 && vidaExtra == false){
+                                    texturaRandom = 11;
+                                }else if (item == 2){
+                                    texturaRandom = 12;
+                                }else if(item == 3){
+                                    texturaRandom = 13;
+                                }else{
+                                    texturaRandom = 14;
+                                }
+                                Gdx.app.log("ITEM", ""+ texturaRandom);
+                            }else{
+                                texturaGeneral = texturaDino_1;
+                                w = 286;
+                                h = 300;
+                                break;
+                            }
                             break;
                         case 2:
                             texturaGeneral = texturaDino_2;
@@ -421,8 +506,20 @@ public class PantallaJugar extends Pantalla {
                             break;
                         default:
                             //alturaObstaculo = 30;
+                            //MathUtils.random(0,2)
                             if (MathUtils.random(0,2) == 0){
-                                texturaRandom = 10;
+                                int item = MathUtils.random(0,4);
+                                if (item == 0){
+                                    texturaRandom = 10;
+                                }else if (item == 1 && vidaExtra == false){
+                                    texturaRandom = 11;
+                                }else if (item == 2){
+                                    texturaRandom = 12;
+                                }else if(item == 3){
+                                    texturaRandom = 13;
+                                }else{
+                                    texturaRandom = 14;
+                                }
                                 Gdx.app.log("ITEM", ""+ texturaRandom);
                             }else{
                                 texturaGeneral = texturaDino_3;
@@ -491,10 +588,10 @@ public class PantallaJugar extends Pantalla {
                     vidaExtra = true;
                 }else if(obstaculo.getTipo() == 3){ //ITEMAZUL
                     arrObstaculos.removeIndex(i);
-                    puntosExtra += 0.3;
+                    aumentarPuntosExtra(0.166666f);
                 }else if(obstaculo.getTipo() == 4){ //ITEMMALO0
                     arrObstaculos.removeIndex(i);
-                    velocidadObstaculos += 1;
+                    aumentarVelocidadOBstaculo(3);
                 }else if(obstaculo.getTipo() == 5){ //ITEMMALO1
                     arrObstaculos.removeIndex(i);
                     puntos-= 20;
@@ -591,7 +688,7 @@ public class PantallaJugar extends Pantalla {
             }else{
                 // derecha
                 // vaquero.moverDerecha(); //
-                if (vaquero.getEstado() != EstadosVaquero.SALTANDO)
+                if (vaquero.getEstado() != EstadosVaquero.SALTANDO && vaquero.getEstado() != EstadosVaquero.DESLIZANDO)
                 {
                     vaquero.saltar();
                 }

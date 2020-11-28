@@ -9,9 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Vaquero extends Objeto
 {
-    //Velocidad
-    private final float DX_VAQUERO = 10;
 
+    // Sprite deslizar
+    Sprite spriteDeslizar;
+    Sprite spriteCorriendo;
     //Texturas
     // Texture texturaIdle;
     private Texture texturaMuriendo;
@@ -35,6 +36,9 @@ public class Vaquero extends Objeto
         yBase = y;
         this.texturaDeslizando = new Texture("Vaquero/Slide.png");
         this.texturaCorrer = new Texture("Vaquero/Run.png");
+        spriteDeslizar = new Sprite(texturaDeslizando);
+        spriteCorriendo = sprite;
+
     }
 
     public EstadosVaquero getEstado() {
@@ -79,12 +83,11 @@ public class Vaquero extends Objeto
             }
         } else if (estado == EstadosVaquero.DESLIZANDO) {
             tAire += 10*delta;
-            sprite.setTexture(texturaDeslizando);
             sprite.draw(batch);
             if (tAire>=tVuelo) {
                 sprite.setY(yBase);
                 estado = EstadosVaquero.CORRIENDO;
-                sprite.setTexture(texturaCorrer);
+                sprite = spriteCorriendo;
             }
         }else{
 
@@ -96,6 +99,13 @@ public class Vaquero extends Objeto
         estado = EstadosVaquero.DESLIZANDO;
         tAire = 0;
         tVuelo = 2*V0/G;
+        sprite = spriteDeslizar;
+    }
+
+    public void moverVaquero(){
+        spriteCorriendo.setX(spriteCorriendo.getX() + 100);
+        spriteDeslizar.setX(spriteCorriendo.getX() + 100);
+
     }
 
 }
