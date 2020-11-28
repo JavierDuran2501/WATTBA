@@ -99,7 +99,10 @@ public class PantallaJugar extends Pantalla {
     private float tiempoBase = 1.5f;
 
     //Música
-    private Music musicaJuego;
+    private Music musicaGeneral;
+    private Music musicaMezo;
+    private Music musicaPrehistoria;
+    private Music musicaAntigua;
 
     // AUmento puntos/velocidad enemigos
     private boolean aumento = false;
@@ -136,18 +139,27 @@ public class PantallaJugar extends Pantalla {
     }
 
     private void crearAudio() {
-        musicaJuego = juego.getManager().get("Musica/musicaMezo.mp3");
-        musicaJuego.setVolume(0.1f);
-        musicaJuego.setLooping(true);
+        musicaMezo = juego.getManager().get("Musica/musicaMezo.mp3");
+        musicaPrehistoria = juego.getManager().get("Musica/musicaPrehistoria.mp3");
+        musicaGeneral = musicaMezo;
+        musicaGeneral.setVolume(0.1f);
+        musicaGeneral.setLooping(true);
+
+
+
+        if (this.epoca == Epocas.PREHISTORIA){
+            musicaGeneral = musicaPrehistoria;
+        }
+
     }
 
     private void controlMusica() {
         Preferences pref = Gdx.app.getPreferences("sonido");
-        if (pref.getBoolean("PLAY"))
-            musicaJuego.play();
-        else
-           musicaJuego.stop();
-
+        if (pref.getBoolean("PLAY")){
+            musicaGeneral.play();
+        }else {
+            musicaGeneral.stop();
+        }
     }
 
     private void crearEscenaGameOver() {
@@ -797,7 +809,7 @@ public class PantallaJugar extends Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-                    musicaJuego.stop();
+                    musicaGeneral.stop();
                     //*********CAMBIADO**********
                     juego.setScreen(new PantallaCargando(juego,Pantallas.MENU));
                 }
@@ -808,7 +820,7 @@ public class PantallaJugar extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     guardarPreferenciaSonido();
-                    if (musicaJuego.isPlaying()){
+                    if (musicaGeneral.isPlaying()){
                         btnSonido.setStyle(Prendido);
                     }else{
                         btnSonido.setStyle(Apagado);
@@ -826,10 +838,10 @@ public class PantallaJugar extends Pantalla {
             if (prefs.getBoolean("PLAY"))
             {
                 prefs.putBoolean("PLAY", false);
-                musicaJuego.stop();
+                musicaGeneral.stop();
             }else {
                 prefs.putBoolean("PLAY", true);
-                musicaJuego.play();
+                musicaGeneral.play();
             }
 
 
@@ -888,7 +900,7 @@ public class PantallaJugar extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     // QUITAR Pausa
-                    musicaJuego.stop();
+                    musicaGeneral.stop();
                     juego.setScreen(new PantallaMenu(juego));
                 }
             });

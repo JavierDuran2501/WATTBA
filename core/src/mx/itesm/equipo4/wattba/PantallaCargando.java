@@ -57,7 +57,6 @@ public class PantallaCargando extends Pantalla
             case JUEGO:
                 cargarRecursosRunner();
                 break;
-            // Agregar otras pantallas
         }
     }
 
@@ -79,19 +78,32 @@ public class PantallaCargando extends Pantalla
     }
 
     private void cargarRecursosRunner() {
+        //Pantallas
         manager.load("Pantallas/Juego.jpg",Texture.class);
         manager.load("Pantallas/edadAntiguaFondo.jpg", Texture.class);
         manager.load("Pantallas/Prehistoria.jpg", Texture.class);
+
+        //Música
         manager.load("Musica/musicaMezo.mp3", Music.class);
+        manager.load("Musica/musicaPrehistoria.mp3",Music.class);
+        manager.load("Musica/MusicaAntigua.mp3",Music.class);
+
+        //Enemigos
         manager.load("Dinosaurios/Dino000.png",Texture.class);
         manager.load("Dinosaurios/Dino001.png",Texture.class);
+
+        //Items
         manager.load("Items/ItemRojo.png",Texture.class);
         manager.load("Items/ItemAzul.png",Texture.class);
         manager.load("Items/ItemDorado.png",Texture.class);
         manager.load("Items/ItemMalo0.png",Texture.class);
         manager.load("Items/ItemMalo1.png",Texture.class);
+
+        //Personaje
         manager.load("Vaquero/Correr2.png",Texture.class);
         manager.load("Vaquero/Dead.png",Texture.class);
+
+        //Botones
         manager.load("btnsPausa/btnReanudar.png",Texture.class);
         manager.load("btnsPausa/btnReanudarRetro.png",Texture.class);
         manager.load("btnsPausa/btnSalir.png",Texture.class);
