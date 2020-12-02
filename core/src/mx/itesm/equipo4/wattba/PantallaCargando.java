@@ -83,11 +83,15 @@ public class PantallaCargando extends Pantalla
         manager.load("Pantallas/Juego.jpg",Texture.class);
         manager.load("Pantallas/edadAntiguaFondo.jpg", Texture.class);
         manager.load("Pantallas/Prehistoria.jpg", Texture.class);
+        manager.load("Pantallas/EdadMedieval.jpg", Texture.class);
+
 
         //Música y sonido
         manager.load("Musica/musicaMezo.mp3", Music.class);
         manager.load("Musica/musicaPrehistoria.mp3",Music.class);
-        manager.load("Musica/MusicaAntigua.mp3",Music.class);
+        manager.load("Musica/musicaAntigua.mp3",Music.class);
+        manager.load("Musica/musicaMedieval.mp3",Music.class);
+
         manager.load("Sonidos/sonidoSalto.mp3", Sound.class);
         manager.load("Sonidos/sonidoItem.mp3",Sound.class);
         manager.load("Sonidos/sonidoItemMalo.mp3",Sound.class);
@@ -96,6 +100,9 @@ public class PantallaCargando extends Pantalla
         //Enemigos
         manager.load("Dinosaurios/Dino000.png",Texture.class);
         manager.load("Dinosaurios/Dino001.png",Texture.class);
+        manager.load("Dinosaurios/Volador0.png",Texture.class);
+
+
 
         //Items
         manager.load("Items/ItemRojo.png",Texture.class);
@@ -124,7 +131,7 @@ public class PantallaCargando extends Pantalla
 
     @Override
     public void render(float delta) {
-        borrarPantalla(0.5f, 0.2f, 0.5f);
+        borrarPantalla();
 
         batch.setProjectionMatrix(camara.combined);
 

@@ -225,7 +225,7 @@ public class PantallaMenu extends Pantalla {
 
     @Override
     public void dispose() {
-        texturaFondo.dispose();
+        //texturaFondo.dispose();
         batch.dispose();
     }
 }
