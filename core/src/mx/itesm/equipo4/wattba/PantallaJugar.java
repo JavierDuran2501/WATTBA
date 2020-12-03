@@ -320,7 +320,7 @@ public class PantallaJugar extends Pantalla {
                 aumento = true;
             }
 
-        }else if(puntos >= 125 && puntos < 200){ // Edad antigua
+        }else if(puntos >= 125 && puntos < 250){ // Edad antigua
             epoca = Epocas.EDAD_ANTIGUA;
             texturaFondo = texturaEdadAntigua;
             if (aumento){
@@ -332,11 +332,59 @@ public class PantallaJugar extends Pantalla {
                 controlMusica();
                 aumento = false;
             }
-        }else if(puntos >= 200){ // Edad Media
+        }else if(puntos >= 250 && puntos < 400){ // Edad Media
             epoca = Epocas.EDAD_ANTIGUA;
             texturaFondo = texturaEdadMedieval;
             if (!aumento){
-                aumentarVelocidadOBstaculo(2);
+                aumentarVelocidadOBstaculo(1);
+                vaquero.moverVaquero();
+                musicaGeneral.stop();
+                musicaGeneral = musicaMedieval;
+                controlMusica();
+                aumento = true;
+            }
+        }else if(puntos >= 400 && puntos < 700){ // Edad Mezosoica
+            epoca = Epocas.MESOZOICA;
+            texturaFondo = texturaMezesoica;
+            if (aumento){
+                aumentarPuntosExtra(0.0166666666666666666f);
+                vaquero.moverVaquero();
+                aumentarVelocidadOBstaculo(1);
+                vaquero.moverVaquero();
+                musicaGeneral.stop();
+                musicaGeneral = musicaMezo;
+                controlMusica();
+                aumento = false;
+            }
+        }else if(puntos >= 700 && puntos < 1000){ // Edad Prehistoria
+            epoca = Epocas.PREHISTORIA;
+            texturaFondo = texturaPrehistoria;
+            if (!aumento){
+                aumentarVelocidadOBstaculo(1);
+                vaquero.moverVaquero();
+                musicaGeneral.stop();
+                musicaGeneral = musicaPrehistoria;
+                controlMusica();
+                aumento = true;
+            }
+        }else if(puntos >= 1000 && puntos < 1500){ // Edad Antigua
+            epoca = Epocas.EDAD_ANTIGUA;
+            texturaFondo = texturaEdadAntigua;
+            if (aumento){
+                aumentarVelocidadOBstaculo(1);
+                aumentarPuntosExtra(0.0166666666666666666f);
+                vaquero.moverVaquero();
+                musicaGeneral.stop();
+                musicaGeneral = musicaAntigua;
+                controlMusica();
+                aumento = false;
+            }
+        }else if(puntos >= 1500){ // Edad Media
+            epoca = Epocas.EDAD_ANTIGUA;
+            texturaFondo = texturaEdadMedieval;
+            if (!aumento){
+                aumentarPuntosExtra(0.0166666666666666666f);
+                aumentarVelocidadOBstaculo(1);
                 vaquero.moverVaquero();
                 musicaGeneral.stop();
                 musicaGeneral = musicaMedieval;
