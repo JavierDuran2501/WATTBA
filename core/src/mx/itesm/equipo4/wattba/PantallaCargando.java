@@ -102,6 +102,7 @@ public class PantallaCargando extends Pantalla
 
         //Enemigos
         manager.load("Dinosaurios/Dino000.png",Texture.class);
+        manager.load("EdadAntigua/Minotauro.png",Texture.class);
         manager.load("Dinosaurios/Dino001.png",Texture.class);
         manager.load("Dinosaurios/Volador0.png",Texture.class);
 

@@ -208,7 +208,7 @@ public class PantallaJugar extends Pantalla {
         // Dinosaurios
         texturaDino_0 = juego.getManager().get("Dinosaurios/Volador0.png");
         texturaDino_1 = juego.getManager().get("Dinosaurios/Dino000.png");
-        texturaDino_2 = new Texture("EdadAntigua/Minotauro.png");
+        texturaDino_2 = juego.getManager().get("EdadAntigua/Minotauro.png");
         texturaDino_3 = juego.getManager().get("Dinosaurios/Dino001.png");
 
         //Items
