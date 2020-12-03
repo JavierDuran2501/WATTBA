@@ -332,7 +332,7 @@ public class PantallaJugar extends Pantalla {
                 controlMusica();
                 aumento = false;
             }
-        }else if(puntos >= 200 && puntos < 300){ // Edad Media
+        }else if(puntos >= 200){ // Edad Media
             epoca = Epocas.EDAD_ANTIGUA;
             texturaFondo = texturaEdadMedieval;
             if (!aumento){
@@ -514,8 +514,8 @@ public class PantallaJugar extends Pantalla {
                             }else {
                                 texturaGeneral = texturaDino_0;
                                 alturaObstaculo = 200;
-                                w = 286;
-                                h = 300;
+                                w = 150;
+                                h = 133;
                             }
                             break;
                         case 1:
@@ -605,8 +605,8 @@ public class PantallaJugar extends Pantalla {
                             }else {
                                 texturaGeneral = texturaDino_0;
                                 alturaObstaculo = 200;
-                                w = 286;
-                                h = 300;
+                                w = 150;
+                                h = 133;
                             }
                             break;
                         case 1:
@@ -696,8 +696,8 @@ public class PantallaJugar extends Pantalla {
                             }else {
                                 texturaGeneral = texturaDino_0;
                                 alturaObstaculo = 200;
-                                w = 286;
-                                h = 300;
+                                w = 150;
+                                h = 133;
                             }
                             break;
                         case 1:
@@ -787,8 +787,8 @@ public class PantallaJugar extends Pantalla {
                             }else {
                                 texturaGeneral = texturaDino_0;
                                 alturaObstaculo = 200;
-                                w = 286;
-                                h = 300;
+                                w = 150;
+                                h = 133;
                             }
                             break;
                         case 1:
@@ -878,8 +878,8 @@ public class PantallaJugar extends Pantalla {
                             }else {
                                 texturaGeneral = texturaDino_0;
                                 alturaObstaculo = 200;
-                                w = 286;
-                                h = 300;
+                                w = 150;
+                                h = 133;
                             }
                             break;
                         case 1:
@@ -969,8 +969,8 @@ public class PantallaJugar extends Pantalla {
                             }else {
                                 texturaGeneral = texturaDino_0;
                                 alturaObstaculo = 200;
-                                w = 286;
-                                h = 300;
+                                w = 150;
+                                h = 133;
                             }
                             break;
                         case 1:
