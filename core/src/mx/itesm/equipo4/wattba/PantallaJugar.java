@@ -107,9 +107,11 @@ public class PantallaJugar extends Pantalla {
     private Music musicaAntigua;
     private Music musicaMedieval;
     private Sound sonidoSalto;
+    private Sound sonidoSlide;
     private Sound sonidoItem;
     private Sound sonidoItemMalo;
     private Sound sonidoCambioEpoca;
+    private Sound sonidoPausa;
 
     // AUmento puntos/velocidad enemigos
     private boolean aumento = false;
@@ -166,6 +168,11 @@ public class PantallaJugar extends Pantalla {
         musicaGeneral.setLooping(true);
 
         sonidoSalto = juego.getManager().get("Sonidos/sonidoSalto.mp3");
+        sonidoSlide = juego.getManager().get("Sonidos/sonidoSlide.mp3");
+        sonidoItem  = juego.getManager().get("Sonidos/sonidoItem.mp3");
+        sonidoItemMalo = juego.getManager().get("Sonidos/sonidoItemMalo.mp3");
+        sonidoPausa = juego.getManager().get("Sonidos/pausa.mp3");
+        sonidoCambioEpoca = juego.getManager().get("Sonidos/sonidoCambioEpoca.mp3");
 
         /*if (this.epoca == Epocas.PREHISTORIA){
             musicaGeneral = musicaPrehistoria;
@@ -1078,18 +1085,23 @@ public class PantallaJugar extends Pantalla {
                 {
                     arrObstaculos.removeIndex(i);
                     puntos += 20;
+                    sonidoItem.play(0.1f);
                 }else if(obstaculo.getTipo() == 2){ //ITEMDORADO
                     arrObstaculos.removeIndex(i);
                     vidaExtra = true;
+                    sonidoItem.play(0.1f);
                 }else if(obstaculo.getTipo() == 3){ //ITEMAZUL
                     arrObstaculos.removeIndex(i);
                     aumentarPuntosExtra(0.008333333333f);
+                    sonidoItem.play(0.1f);
                 }else if(obstaculo.getTipo() == 4){ //ITEMMALO0
                     arrObstaculos.removeIndex(i);
                     aumentarVelocidadOBstaculo(3);
+                    sonidoItemMalo.play(0.1f);
                 }else if(obstaculo.getTipo() == 5){ //ITEMMALO1
                     arrObstaculos.removeIndex(i);
                     puntos-= 20;
+                    sonidoItemMalo.play(0.1f);
                 }
                 else if(vidaExtra){
                     arrObstaculos.removeIndex(i);
@@ -1163,6 +1175,7 @@ public class PantallaJugar extends Pantalla {
             if (rectBoton.contains(v.x, v.y)){  //Pico botón de Pausa
                 if (estado == EstadoJuego.JUGANDO){
                     estado = EstadoJuego.PAUSADO;
+                    sonidoPausa.play(0.1f);
                     // Cambiar el InputProcessor
                     Gdx.input.setInputProcessor(escenaPausa);
                     Gdx.app.log("PAUSA", "Cambia a pausado....");
@@ -1177,6 +1190,7 @@ public class PantallaJugar extends Pantalla {
                 // Deslizar
                 Gdx.app.log("CLICK IZQUIERDO", "Se clickeo el lado izquierdo");
                 if (vaquero.getEstado() != EstadosVaquero.SALTANDO){
+                    sonidoSlide.play(0.1f);
                     vaquero.deslizar();
                 }
 

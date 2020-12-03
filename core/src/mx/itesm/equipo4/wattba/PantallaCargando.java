@@ -86,16 +86,19 @@ public class PantallaCargando extends Pantalla
         manager.load("Pantallas/EdadMedieval.jpg", Texture.class);
 
 
-        //Música y sonido
+        //Música
         manager.load("Musica/musicaMezo.mp3", Music.class);
         manager.load("Musica/musicaPrehistoria.mp3",Music.class);
         manager.load("Musica/musicaAntigua.mp3",Music.class);
         manager.load("Musica/musicaMedieval.mp3",Music.class);
 
+        //Sonido
         manager.load("Sonidos/sonidoSalto.mp3", Sound.class);
         manager.load("Sonidos/sonidoItem.mp3",Sound.class);
         manager.load("Sonidos/sonidoItemMalo.mp3",Sound.class);
         manager.load("Sonidos/sonidoCambioEpoca.mp3",Sound.class);
+        manager.load("Sonidos/sonidoSlide.mp3",Sound.class);
+        manager.load("Sonidos/pausa.mp3",Sound.class);
 
         //Enemigos
         manager.load("Dinosaurios/Dino000.png",Texture.class);
